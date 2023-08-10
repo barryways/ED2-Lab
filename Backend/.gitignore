@@ -1,0 +1,33 @@
+# Archivos y directorios generados por el sistema operativo o editores de código
+node_modules/
+npm-debug.log
+yarn-error.log
+.DS_Store
+.vscode/
+.idea/
+
+# Archivos de configuración
+config.js
+config.json
+
+# Archivos de registro
+logs/
+*.log
+
+# Archivos temporales
+*.tmp
+*.swp
+
+# Archivos de entorno local
+.env
+
+# Dependiendo del sistema de bases de datos que uses, puedes añadir reglas adicionales para ignorar archivos de bases de datos.
+
+# Dependiendo de tu sistema de construcción o empaquetado, también puedes necesitar ignorar otros directorios o archivos.
+
+# Si estás usando TypeScript, podrías querer ignorar los archivos de salida de TypeScript.
+# *.js
+# *.d.ts
+
+# Si estás usando Babel, podrías querer ignorar los archivos transpilados.
+dist/
