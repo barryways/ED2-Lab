@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import { footerPage } from './layouts/modules/footer'
 import './App.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
+      <footerPage/>
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
@@ -28,6 +30,9 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <div>
+        
+      </div>
     </>
   )
 }
