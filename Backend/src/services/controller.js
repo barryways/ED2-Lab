@@ -113,9 +113,9 @@ const processDelete = async (parsedData, Tree) => {
       });
       console.log("Eliminación exitosa 1");
     } else if (typeof parsedData === "object") {
-      console.log("Parsed Data:", parsedData); // Agrega esta línea de depuración
+      //console.log("Parsed Data:", parsedData); // Agrega esta línea de depuración
       Tree.delete(parsedData.dpi);
-      console.log(`Eliminación exitosa para DPI ${parsedData.dpi}`);
+      //console.log(`Eliminación exitosa para DPI ${parsedData.dpi}`);
     } else {
       console.error(`Formato JSON no válido: ${JSON.stringify(parsedData)}`);
     }
@@ -135,7 +135,7 @@ const processPatch = async (parsedData, Tree) => {
       const existingData = Tree.search(parsedData.dpi);
       if (existingData) {
         Object.assign(existingData, parsedData);
-        console.log(`Actualización exitosa para DPI ${parsedData.dpi}`);
+       // console.log(`Actualización exitosa para DPI ${parsedData.dpi}`);
       } else {
         console.log(`No se encontró el DPI ${parsedData.dpi} para actualizar`);
       }
@@ -206,10 +206,92 @@ const read = asyncHandler(async (req, res) => {
     for (const line of lines) {
       processLine(line, Tree);
     }
+    res.send(`Data Lista`)
   });
+  
+
   } catch (error) {
     console.error("Error al leer el archivo:", error);
   }
 });
 
-export { insert, deleteData, patch, search,  read };
+const getData = asyncHandler(async (req, res) => {
+  try {
+    res.send(Tree.getAllDataJSONL());
+  } catch (error) {
+    console.log(`Ocurrio un error ${error}`)
+  }
+})
+
+const contadorData = asyncHandler(async (req, res) => {
+  try {
+    fs.readFile('./src/data/dataCruda.json', 'utf8', (err, data) => {
+      if (err) {
+          console.error('Error al leer el archivo data.json:', err);
+          return;
+      }
+      try {
+          // Parsear el contenido JSON y contar los objetos
+          const jsonData = JSON.parse(data);
+          const numObjects = jsonData.length;
+          console.log(`Número de objetos en el JSON: ${numObjects}`);
+      } catch (error) {
+          console.error('Error al parsear el JSON:', error);
+      }
+  });
+  } catch (error) {
+    console.log(`Ocurrio un error ${error}`)
+  }
+})
+
+
+const dataRepetida = asyncHandler(async (req, res) => {
+  try {
+    fs.readFile('./src/data/dataCruda.json', 'utf8', (err, data) => {
+      if (err) {
+          console.error('Error al leer el archivo data.json:', err);
+          return;
+      }
+  
+      try {
+          // Parsear el contenido JSON
+          const jsonData = JSON.parse(data);
+  
+          // Crear un objeto para almacenar objetos duplicados
+          const duplicates = {};
+  
+          // Encontrar objetos duplicados
+          jsonData.forEach((obj, index) => {
+              const key = JSON.stringify(obj);
+              if (duplicates[key] === undefined) {
+                  duplicates[key] = [index];
+              } else {
+                  duplicates[key].push(index);
+              }
+          });
+  
+          // Filtrar y mostrar objetos duplicados
+          const duplicateKeys = Object.keys(duplicates).filter(key => duplicates[key].length > 1);
+          duplicateKeys.forEach(key => {
+              const indexes = duplicates[key];
+              const duplicatedObjects = indexes.map(index => jsonData[index]);
+              res.send(JSON.stringify(duplicatedObjects));
+          });
+  
+      } catch (error) {
+          console.error('Error al parsear el JSON:', error);
+      }
+  });
+  } catch (error) {
+    console.log(`Ocurrio un error ${error}`)
+  }
+})
+
+
+
+
+
+
+
+
+export { insert, deleteData, patch, search,  read, getData, contadorData, dataRepetida};

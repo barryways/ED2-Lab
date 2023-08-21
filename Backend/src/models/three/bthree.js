@@ -206,5 +206,36 @@ class BTree {
       parent.children.splice(index, 1, merged);
     }
   }
+
+  traverseAndConcatJSONL(node) {
+    let result = "";
+    if (node) {
+      for (let i = 0; i < node.keys.length; i++) {
+        if (i > 0 || result !== "") {
+          result += "\n"; // Add newline before each JSON object (except the first)
+        }
+
+        result += JSON.stringify(node.values[i]); // Append the JSON object
+
+        if (node.children.length > i) {
+          result += this.traverseAndConcatJSONL(node.children[i]);
+        }
+      }
+      if (node.children.length > node.keys.length) {
+        result += this.traverseAndConcatJSONL(
+          node.children[node.keys.length]
+        );
+      }
+    }
+    return result;
+  }
+
+
+  // Method to get all data in JSONL format
+  getAllDataJSONL() {
+    return this.traverseAndConcatJSONL(this.root, "");
+  }
+
+
 }
 export default BTree;

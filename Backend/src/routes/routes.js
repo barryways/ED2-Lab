@@ -5,7 +5,10 @@ import {
     deleteData,
     patch,
     search,
-    read
+    read,
+    getData, 
+    contadorData,
+    dataRepetida
 } from '../services/controller.js'
 //import readData from "../models/model.js";
 
@@ -18,7 +21,12 @@ router.route('/patch/:name/:lastName/:dpi/:dir/').get(patch);
 router.route('/read/').get(read);
 //localhost:4000/api/lab1/read/
 router.route('/search/:dpi/').get(search)
-
-
+//localhost:4000/api/lab1/search/:dpi
+router.route('/getdata/').get(getData)
+//localhost:4000/api/lab1/getdata/
+router.route('/datatotal/').get(contadorData)
+//localhost:4000/api/lab1/getdata/
+router.route('/repetidos/').get(dataRepetida)
+//localhost:4000/api/lab1/getdata/
 
 export default router;
