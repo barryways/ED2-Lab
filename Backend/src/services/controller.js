@@ -217,7 +217,7 @@ const read = asyncHandler(async (req, res) => {
 
 const getData = asyncHandler(async (req, res) => {
   try {
-    res.send(Tree.getAllDataJSONL());
+    res.send(Tree.getAllDataJSON());
   } catch (error) {
     console.log(`Ocurrio un error ${error}`)
   }
@@ -247,7 +247,7 @@ const contadorData = asyncHandler(async (req, res) => {
 
 const dataRepetida = asyncHandler(async (req, res) => {
   try {
-    fs.readFile('./src/data/dataCruda.json', 'utf8', (err, data) => {
+    fs.readFile('./src/data/dataCruda.jsonl', 'utf8', (err, data) => {
       if (err) {
           console.error('Error al leer el archivo data.json:', err);
           return;
@@ -294,4 +294,4 @@ const dataRepetida = asyncHandler(async (req, res) => {
 
 
 
-export { insert, deleteData, patch, search,  read, getData, contadorData, dataRepetida};
+export { insert, deleteData, patch, search, read, getData, contadorData, dataRepetida};

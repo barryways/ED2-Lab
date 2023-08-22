@@ -3,6 +3,7 @@ class TreeNode {
     this.keys = []; // Array para almacenar las keys (en este caso, valores de dpi)
     this.values = []; // Array para almacenar los valores (los datos en formato JSON)
     this.children = []; // Array para almacenar los nodos hijos
+
   }
 }
 
@@ -10,6 +11,7 @@ class BTree {
   constructor(degree) {
     this.root = new TreeNode();
     this.degree = degree;
+    this.encounteredValues = new Set();
   }
 
   insert(key, value) {
@@ -207,34 +209,39 @@ class BTree {
     }
   }
 
-  traverseAndConcatJSONL(node) {
-    let result = "";
+  traverseAndConcatJSON(node) {
+    let result = [];
     if (node) {
       for (let i = 0; i < node.keys.length; i++) {
-        if (i > 0 || result !== "") {
-          result += "\n"; // Add newline before each JSON object (except the first)
+        const value = node.values[i];
+        
+        if (!this.encounteredValues.has(value)) {
+          this.encounteredValues.add(value);
+          result.push(value); // Append the JSON object
         }
-
-        result += JSON.stringify(node.values[i]); // Append the JSON object
-
+  
         if (node.children.length > i) {
-          result += this.traverseAndConcatJSONL(node.children[i]);
+          const childResult = this.traverseAndConcatJSON(node.children[i]);
+          result = result.concat(childResult);
         }
       }
       if (node.children.length > node.keys.length) {
-        result += this.traverseAndConcatJSONL(
+        const childResult = this.traverseAndConcatJSON(
           node.children[node.keys.length]
         );
+        result = result.concat(childResult);
       }
     }
     return result;
   }
-
-
-  // Method to get all data in JSONL format
-  getAllDataJSONL() {
-    return this.traverseAndConcatJSONL(this.root, "");
+  
+  // Method to get all data in JSON format with commas separating the objects
+  getAllDataJSON() {
+    this.encounteredValues.clear(); // Clear encountered values before each call
+    const jsonData = this.traverseAndConcatJSON(this.root);
+    return JSON.stringify(jsonData, null, 2); // 2 spaces for indentation
   }
+
 
 
 }
