@@ -3,7 +3,7 @@ import asyncHandler from "express-async-handler";
 import fs from "fs";
 import BTree from "../models/three/bthree.js";
 
-const Tree = new BTree(150);
+const Tree = new BTree(200);
 
 const insert = asyncHandler(async (req, res) => {
   const name = req.params.name;
@@ -247,7 +247,7 @@ const contadorData = asyncHandler(async (req, res) => {
 
 const dataRepetida = asyncHandler(async (req, res) => {
   try {
-    fs.readFile('./src/data/dataCruda.jsonl', 'utf8', (err, data) => {
+    fs.readFile('./src/data/dataCruda.json', 'utf8', (err, data) => {
       if (err) {
           console.error('Error al leer el archivo data.json:', err);
           return;
@@ -275,9 +275,10 @@ const dataRepetida = asyncHandler(async (req, res) => {
           duplicateKeys.forEach(key => {
               const indexes = duplicates[key];
               const duplicatedObjects = indexes.map(index => jsonData[index]);
+              
               res.send(JSON.stringify(duplicatedObjects));
           });
-  
+          res.send('no hay repetidos');
       } catch (error) {
           console.error('Error al parsear el JSON:', error);
       }
