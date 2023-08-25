@@ -1,25 +1,26 @@
-// Create node
-const Node = function (item) {
-  this.item = item;
-  this.height = 1;
-  this.left = null;
-  this.right = null;
-};
-//AVL Tree
-const AVLTree = function () {
-  let root = null;
-
-  //return height of the node
-  this.height = (N) => {
+// node class
+class Node{
+  constructor(item){
+    this.item = item;
+    this.keyDPI = null;
+    this.keyName = null;
+    this.height = 1;
+    this.left = null;
+    this.right = null;
+  }
+}
+//AVL Tree class
+class AVLTree{
+  constructor(){
+    this.root = null;
+  }
+  height(N){
     if (N === null) {
       return 0;
     }
-
     return N.height;
   };
-
-  //right rotate
-  this.rightRotate = (y) => {
+  rightRotate(y){
     let x = y.left;
     let T2 = x.right;
     x.right = y;
@@ -28,9 +29,7 @@ const AVLTree = function () {
     x.height = Math.max(this.height(x.left), this.height(x.right)) + 1;
     return x;
   };
-
-  //left rotate
-  this.leftRotate = (x) => {
+  leftRotate(x){
     let y = x.right;
     let T2 = y.left;
     y.left = x;
@@ -39,27 +38,23 @@ const AVLTree = function () {
     y.height = Math.max(this.height(y.left), this.height(y.right)) + 1;
     return y;
   };
-
-  // get balance factor of a node
-  this.getBalanceFactor = (N) => {
+  getBalanceFactor(N){
     if (N == null) {
       return 0;
     }
 
     return this.height(N.left) - this.height(N.right);
   };
-
-  // helper function to insert a node
-  const insertNodeHelper = (node, item) => {
+  insertNodeHelper(node, item){
     // find the position and insert the node
     if (node === null) {
       return new Node(item);
     }
 
     if (item < node.item) {
-      node.left = insertNodeHelper(node.left, item);
+      node.left = this.insertNodeHelper(node.left, item);
     } else if (item > node.item) {
-      node.right = insertNodeHelper(node.right, item);
+      node.right = this.insertNodeHelper(node.right, item);
     } else {
       return node;
     }
@@ -90,15 +85,13 @@ const AVLTree = function () {
 
     return node;
   };
-
-  // insert a node
-  this.insertNode = (item) => {
+  insertNode(item){
     // console.log(root);
-    root = insertNodeHelper(root, item);
+    this.root = this.insertNodeHelper(this.root, item);
   };
 
   //get node with minimum value
-  this.nodeWithMimumValue = (node) => {
+  nodeWithMimumValue(node){
     let current = node;
     while (current.left !== null) {
       current = current.left;
@@ -107,15 +100,15 @@ const AVLTree = function () {
   };
 
   // delete helper
-  const deleteNodeHelper = (root, item) => {
+  deleteNodeHelper(root, item){
     // find the node to be deleted and remove it
     if (root == null) {
       return root;
     }
     if (item < root.item) {
-      root.left = deleteNodeHelper(root.left, item);
+      root.left = this.deleteNodeHelper(root.left, item);
     } else if (item > root.item) {
-      root.right = deleteNodeHelper(root.right, item);
+      root.right = this.deleteNodeHelper(root.right, item);
     } else {
       if (root.left === null || root.right === null) {
         let temp = null;
@@ -134,7 +127,7 @@ const AVLTree = function () {
       } else {
         let temp = this.nodeWithMimumValue(root.right);
         root.item = temp.item;
-        root.right = deleteNodeHelper(root.right, temp.item);
+        root.right = this.deleteNodeHelper(root.right, temp.item);
       }
     }
     if (root == null) {
@@ -165,22 +158,41 @@ const AVLTree = function () {
   };
 
   //delete a node
-  this.deleteNode = (item) => {
-    root = deleteNodeHelper(root, item);
+  deleteNode(item){
+    this.root = this.deleteNodeHelper(this.root, item);
   };
 
   // print the tree in pre - order
-  this.preOrder = () => {
-    preOrderHelper(root);
+  preOrder(){
+    this.preOrderHelper(this.root);
   };
 
-  const preOrderHelper = (node) => {
+  preOrderHelper(node){
     if (node) {
       console.log(node.item);
-      preOrderHelper(node.left);
-      preOrderHelper(node.right);
+      this.preOrderHelper(node.left);
+      this.preOrderHelper(node.right);
     }
   };
-};
+  search(item) {
+    console.log(this.searchNodeHelper(this.root, item))
+    
+  }
+  
+  searchNodeHelper(node, item) {
+    if (node === null || node.item.dpi === item.dpi) {
+      return node;
+    }
+  
+    if (item.dpi < node.item.dpi) {
+      return this.searchNodeHelper(node.left, item);
+    } else {
+      return this.searchNodeHelper(node.right, item);
+    }
+  }
+  
+  
+  
+}
 
-export { AVLTree };
+export default AVLTree;

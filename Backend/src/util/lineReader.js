@@ -1,18 +1,5 @@
-import Person from "../models/person";
-import AVLTree, { AVLTree } from "../common/avltree";
-const AVLTree = new AVLTree();
-
-function InsertData(person){
-    AVLTree.insertNode(person);
-}
-
-function DeleteData(person){
-    return true;
-}
-
-function PatchData(person){
-    return true;
-}
+import Person from "../models/person.js";
+import { InsertData,DeleteData, PatchData } from "./operation.js";
 
 
 function processLine(line){

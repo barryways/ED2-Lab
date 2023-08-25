@@ -10,6 +10,8 @@ import {
     contadorData,
     dataRepetida
 } from '../services/controller.js'
+import csvParser from "../util/csvParser.js";
+
 //import readData from "../models/model.js";
 
 router.route('/insert/:name/:lastName/:dpi/:dir/').get(insert);
@@ -28,5 +30,10 @@ router.route('/datatotal/').get(contadorData)
 //localhost:4000/api/lab1/getdata/
 router.route('/repetidos/').get(dataRepetida)
 //localhost:4000/api/lab1/getdata/
+router.route('/avl/').get(csvParser);
+//localhost:4000/api/lab1/getdata/
+
+
+
 
 export default router;

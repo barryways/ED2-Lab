@@ -1,5 +1,5 @@
 import fs from "fs";
-import processLine from "../util/operations.js";
+import processLine from "./lineReader.js";
 
 export default function csvParser() {
   try {
@@ -10,7 +10,7 @@ export default function csvParser() {
       }
       const lines = data.trim().split("\n");
       for (const line of lines) {
-        processLine(line);
+        processLine(line); //this method is in operations.js
       }
     });
     return 
