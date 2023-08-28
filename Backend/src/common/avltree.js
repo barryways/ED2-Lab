@@ -1,6 +1,6 @@
 // node class
-class Node{
-  constructor(item){
+class Node {
+  constructor(item) {
     this.item = item;
     this.keyDPI = null;
     this.keyName = null;
@@ -10,17 +10,17 @@ class Node{
   }
 }
 //AVL Tree class
-class AVLTree{
-  constructor(){
+class AVLTree {
+  constructor() {
     this.root = null;
   }
-  height(N){
+  height(N) {
     if (N === null) {
       return 0;
     }
     return N.height;
-  };
-  rightRotate(y){
+  }
+  rightRotate(y) {
     let x = y.left;
     let T2 = x.right;
     x.right = y;
@@ -28,8 +28,8 @@ class AVLTree{
     y.height = Math.max(this.height(y.left), this.height(y.right)) + 1;
     x.height = Math.max(this.height(x.left), this.height(x.right)) + 1;
     return x;
-  };
-  leftRotate(x){
+  }
+  leftRotate(x) {
     let y = x.right;
     let T2 = y.left;
     y.left = x;
@@ -37,17 +37,17 @@ class AVLTree{
     x.height = Math.max(this.height(x.left), this.height(x.right)) + 1;
     y.height = Math.max(this.height(y.left), this.height(y.right)) + 1;
     return y;
-  };
+  }
 
-  getBalanceFactor(N){
+  getBalanceFactor(N) {
     if (N == null) {
       return 0;
     }
 
     return this.height(N.left) - this.height(N.right);
-  };
+  }
 
-  insertNodeHelper(node, item){
+  insertNodeHelper(node, item) {
     // find the position and insert the node
     if (node === null) {
       return new Node(item);
@@ -86,23 +86,23 @@ class AVLTree{
     }
 
     return node;
-  };
-  insertNode(item){
-  //console.log(item);
+  }
+  insertNode(item) {
+    //console.log(item);
     this.root = this.insertNodeHelper(this.root, item);
-  };
+  }
 
   //get node with minimum value
-  nodeWithMimumValue(node){
+  nodeWithMimumValue(node) {
     let current = node;
     while (current.left !== null) {
       current = current.left;
     }
     return current;
-  };
+  }
 
   // delete helper
-  deleteNodeHelper(root, item){
+  deleteNodeHelper(root, item) {
     // find the node to be deleted and remove it
     if (root == null) {
       return root;
@@ -157,30 +157,30 @@ class AVLTree{
       }
     }
     return root;
-  };
+  }
 
   //delete a node
-  deleteNode(item){
+  deleteNode(item) {
     this.root = this.deleteNodeHelper(this.root, item);
-  };
+  }
 
   // print the tree in pre - order
-  preOrder(){
+  preOrder() {
     return this.preOrderHelper(this.root);
-  };
+  }
 
-  preOrderHelper(node){
+  preOrderHelper(node) {
     if (node) {
       console.log(node.item);
       this.preOrderHelper(node.left);
       this.preOrderHelper(node.right);
     }
-  };
+  }
 
   search(person) {
     return this.searchNodeHelper(this.root, person);
   }
-  
+
   searchNodeHelper(node, person) {
     if (node === null || node.item.dpi === person.dpi) {
       return node ? node.item.dpi : null;
@@ -192,19 +192,19 @@ class AVLTree{
     }
   }
 
-  patch(person){
+  patch(person) {
     try {
       var persona = this.patchNodeHelper(this.root, person);
-      persona.item.name = person.name
-      persona.item.dpi = person.dpi
-      persona.item.datebirth = person.datebirth
-      persona.item.address = person.address
+      persona.item.name = person.name;
+      persona.item.dpi = person.dpi;
+      persona.item.datebirth = person.datebirth;
+      persona.item.address = person.address;
       return true;
     } catch (error) {
       return false;
     }
   }
-  patchNodeHelper(node, person){
+  patchNodeHelper(node, person) {
     if (node === null || node.item.dpi === person.dpi) {
       return node ? node : null;
     }
@@ -214,8 +214,6 @@ class AVLTree{
       return this.patchNodeHelper(node.right, person);
     }
   }
-
-  
 }
 
 export default AVLTree;

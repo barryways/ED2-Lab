@@ -4,11 +4,12 @@ import { InsertData, DeleteData, PatchData } from "./operation.js";
 function processLine(line) {
   const [command, jsonData] = line.split(";");
   const parsedData = JSON.parse(jsonData);
-    const person = new Person (
-      parsedData.name,
-      parsedData.dpi,
-      parsedData.datebirth,
-      parsedData.address);
+  const person = new Person(
+    parsedData.name,
+    parsedData.dpi,
+    parsedData.datebirth,
+    parsedData.address
+  );
 
   try {
     if (command === "INSERT") {

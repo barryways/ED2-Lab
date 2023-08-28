@@ -11,3 +11,4 @@ app.use('/api/lab1', lab1Routes); //Route: localhost:4000/api/lab1/ [for laborat
 app.listen(PORT, ()=>{
     console.log(`El servidor esta escuchando en el puerto ${PORT}`);
 });
+//nextui -> buscar para frontend

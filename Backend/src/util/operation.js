@@ -13,7 +13,6 @@ function InsertData(person) {
 function DeleteData(person) {
   try {
     return tree.deleteNode(person);
-    // console.log('Dato Eliminado correctamente');
   } catch (error) {
     return console.log("Dato no eliminado por " + error);
   }
@@ -21,11 +20,9 @@ function DeleteData(person) {
 
 function PatchData(person) {
   try {
-    if(tree.patch(person)!== null){
-      return true
+    if (tree.patch(person) !== null) {
+      return true;
     }
-    //return console.log(`No se encontro nada`);
-    //console.log(`Esto devuelve ${tree.search(dpi)}`);
   } catch (error) {
     console.log("Error durante la búsqueda:", error);
   }
@@ -33,11 +30,10 @@ function PatchData(person) {
 
 function PreOrder() {
   try {
-    tree.preOrder()
+    tree.preOrder();
   } catch (error) {
     console.log("Error durante el preorder:", error);
   }
 }
-
 
 export { InsertData, DeleteData, PatchData, PreOrder };

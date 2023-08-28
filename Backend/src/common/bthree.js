@@ -3,7 +3,6 @@ class TreeNode {
     this.keys = []; // Array para almacenar las keys (en este caso, valores de dpi)
     this.values = []; // Array para almacenar los valores (los datos en formato JSON)
     this.children = []; // Array para almacenar los nodos hijos
-
   }
 }
 
@@ -214,12 +213,12 @@ class BTree {
     if (node) {
       for (let i = 0; i < node.keys.length; i++) {
         const value = node.values[i];
-        
+
         if (!this.encounteredValues.has(value)) {
           this.encounteredValues.add(value);
           result.push(value); // Append the JSON object
         }
-  
+
         if (node.children.length > i) {
           const childResult = this.traverseAndConcatJSON(node.children[i]);
           result = result.concat(childResult);
@@ -234,15 +233,12 @@ class BTree {
     }
     return result;
   }
-  
+
   // Method to get all data in JSON format with commas separating the objects
   getAllDataJSON() {
     this.encounteredValues.clear(); // Clear encountered values before each call
     const jsonData = this.traverseAndConcatJSON(this.root);
     return JSON.stringify(jsonData, null, 2); // 2 spaces for indentation
   }
-
-
-
 }
 export default BTree;
