@@ -1,9 +1,9 @@
 class Person{
-  constructor(name, dpi, birthdate, adress){
+  constructor(name, dpi, datebirth, address){
     this.name = name;
     this.dpi = dpi;
-    this.birthdate = birthdate;
-    this.adress = adress;
+    this.datebirth = datebirth;
+    this.address = address;
   }
 }
 

@@ -11,6 +11,7 @@ import {
     dataRepetida
 } from '../services/controller.js'
 import csvParser from "../util/csvParser.js";
+import insertDato from "../services/controller.lab1.js";
 
 //import readData from "../models/model.js";
 
@@ -32,7 +33,8 @@ router.route('/repetidos/').get(dataRepetida)
 //localhost:4000/api/lab1/getdata/
 router.route('/avl/').get(csvParser);
 //localhost:4000/api/lab1/getdata/
-
+router.route('/pruebaDato/').get(insertDato);
+//localhost:4000/api/lab1/getdata/
 
 
 

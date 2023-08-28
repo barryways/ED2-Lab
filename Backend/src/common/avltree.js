@@ -38,6 +38,7 @@ class AVLTree{
     y.height = Math.max(this.height(y.left), this.height(y.right)) + 1;
     return y;
   };
+
   getBalanceFactor(N){
     if (N == null) {
       return 0;
@@ -45,15 +46,16 @@ class AVLTree{
 
     return this.height(N.left) - this.height(N.right);
   };
+
   insertNodeHelper(node, item){
     // find the position and insert the node
     if (node === null) {
       return new Node(item);
     }
 
-    if (item < node.item) {
+    if (item[1] < node.item[1]) {
       node.left = this.insertNodeHelper(node.left, item);
-    } else if (item > node.item) {
+    } else if (item[1] > node.item[1]) {
       node.right = this.insertNodeHelper(node.right, item);
     } else {
       return node;
@@ -66,18 +68,18 @@ class AVLTree{
     let balanceFactor = this.getBalanceFactor(node);
 
     if (balanceFactor > 1) {
-      if (item < node.left.item) {
+      if (item[1] < node.left.item[1]) {
         return this.rightRotate(node);
-      } else if (item > node.left.item) {
+      } else if (item[1] > node.left.item[1]) {
         node.left = this.leftRotate(node.left);
         return this.rightRotate(node);
       }
     }
 
     if (balanceFactor < -1) {
-      if (item > node.right.item) {
+      if (item[1] > node.right.item[1]) {
         return this.leftRotate(node);
-      } else if (item < node.right.item) {
+      } else if (item[1] < node.right.item[1]) {
         node.right = this.rightRotate(node.right);
         return this.leftRotate(node);
       }
@@ -86,7 +88,7 @@ class AVLTree{
     return node;
   };
   insertNode(item){
-    // console.log(root);
+  //console.log(item);
     this.root = this.insertNodeHelper(this.root, item);
   };
 
@@ -105,9 +107,9 @@ class AVLTree{
     if (root == null) {
       return root;
     }
-    if (item < root.item) {
+    if (item[1] < root.item[1]) {
       root.left = this.deleteNodeHelper(root.left, item);
-    } else if (item > root.item) {
+    } else if (item[1] > root.item[1]) {
       root.right = this.deleteNodeHelper(root.right, item);
     } else {
       if (root.left === null || root.right === null) {
@@ -164,7 +166,7 @@ class AVLTree{
 
   // print the tree in pre - order
   preOrder(){
-    this.preOrderHelper(this.root);
+    return this.preOrderHelper(this.root);
   };
 
   preOrderHelper(node){
@@ -174,24 +176,42 @@ class AVLTree{
       this.preOrderHelper(node.right);
     }
   };
-  search(item) {
-    console.log(this.searchNodeHelper(this.root, item))
-    
+
+  search(person) {
+    return this.searchNodeHelper(this.root, person);
   }
   
-  searchNodeHelper(node, item) {
-    if (node === null || node.item.dpi === item.dpi) {
+  searchNodeHelper(node, person) {
+    if (node === null || node.item[1] === person[1]) {
+      return node ? node.item[1] : null;
+    }
+    if (person[1] < node.item[1]) {
+      return this.searchNodeHelper(node.left, person);
+    } else {
+      return this.searchNodeHelper(node.right, person);
+    }
+  }
+
+  patch(person){
+    var persona = this.patchNodeHelper(this.root, person);
+    console.log(`Esta es la persona antes del patch ${persona.item[0]} ${persona.item[1]} ${persona.item[2]} ${persona.item[3]}`)
+    persona.item[0] = person[0]
+    persona.item[1] = person[1]
+    persona.item[2] = person[2]
+    persona.item[3] = person[3]
+    console.log(`Esta es la persona despues del patch ${persona.item[0]} ${persona.item[1]} ${persona.item[2]} ${persona.item[3]}`)
+  }
+  patchNodeHelper(node, person){
+    if (node === null || node.item[1] === person[1]) {
       return node;
     }
-  
-    if (item.dpi < node.item.dpi) {
-      return this.searchNodeHelper(node.left, item);
+    if (person[1] < node.item[1]) {
+      return this.patchNodeHelper(node.left, person);
     } else {
-      return this.searchNodeHelper(node.right, item);
+      return this.patchNodeHelper(node.right, person);
     }
   }
-  
-  
+
   
 }
 

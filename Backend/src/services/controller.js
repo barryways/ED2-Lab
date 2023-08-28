@@ -1,7 +1,7 @@
 import json from "express";
 import asyncHandler from "express-async-handler";
 import fs from "fs";
-import BTree from "../models/three/bthree.js";
+import BTree from "../common/bthree.js";
 
 const Tree = new BTree(200);
 
