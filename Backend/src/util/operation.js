@@ -24,7 +24,7 @@ function PatchData(person) {
     if(tree.patch(person)!== null){
       return true
     }
-    return console.log(`No se encontro nada`);
+    //return console.log(`No se encontro nada`);
     //console.log(`Esto devuelve ${tree.search(dpi)}`);
   } catch (error) {
     console.log("Error durante la búsqueda:", error);
@@ -33,7 +33,7 @@ function PatchData(person) {
 
 function PreOrder() {
   try {
-    console.log(tree.preOrder());
+    tree.preOrder()
   } catch (error) {
     console.log("Error durante el preorder:", error);
   }

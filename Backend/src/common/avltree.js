@@ -53,9 +53,9 @@ class AVLTree{
       return new Node(item);
     }
 
-    if (item[1] < node.item[1]) {
+    if (item.dpi < node.item.dpi) {
       node.left = this.insertNodeHelper(node.left, item);
-    } else if (item[1] > node.item[1]) {
+    } else if (item.dpi > node.item.dpi) {
       node.right = this.insertNodeHelper(node.right, item);
     } else {
       return node;
@@ -68,18 +68,18 @@ class AVLTree{
     let balanceFactor = this.getBalanceFactor(node);
 
     if (balanceFactor > 1) {
-      if (item[1] < node.left.item[1]) {
+      if (item.dpi < node.left.item.dpi) {
         return this.rightRotate(node);
-      } else if (item[1] > node.left.item[1]) {
+      } else if (item.dpi > node.left.item.dpi) {
         node.left = this.leftRotate(node.left);
         return this.rightRotate(node);
       }
     }
 
     if (balanceFactor < -1) {
-      if (item[1] > node.right.item[1]) {
+      if (item.dpi > node.right.item.dpi) {
         return this.leftRotate(node);
-      } else if (item[1] < node.right.item[1]) {
+      } else if (item.dpi < node.right.item.dpi) {
         node.right = this.rightRotate(node.right);
         return this.leftRotate(node);
       }
@@ -107,9 +107,9 @@ class AVLTree{
     if (root == null) {
       return root;
     }
-    if (item[1] < root.item[1]) {
+    if (item.dpi < root.item.dpi) {
       root.left = this.deleteNodeHelper(root.left, item);
-    } else if (item[1] > root.item[1]) {
+    } else if (item.dpi > root.item.dpi) {
       root.right = this.deleteNodeHelper(root.right, item);
     } else {
       if (root.left === null || root.right === null) {
@@ -182,10 +182,10 @@ class AVLTree{
   }
   
   searchNodeHelper(node, person) {
-    if (node === null || node.item[1] === person[1]) {
-      return node ? node.item[1] : null;
+    if (node === null || node.item.dpi === person.dpi) {
+      return node ? node.item.dpi : null;
     }
-    if (person[1] < node.item[1]) {
+    if (person.dpi < node.item.dpi) {
       return this.searchNodeHelper(node.left, person);
     } else {
       return this.searchNodeHelper(node.right, person);
@@ -193,19 +193,22 @@ class AVLTree{
   }
 
   patch(person){
-    var persona = this.patchNodeHelper(this.root, person);
-    console.log(`Esta es la persona antes del patch ${persona.item[0]} ${persona.item[1]} ${persona.item[2]} ${persona.item[3]}`)
-    persona.item[0] = person[0]
-    persona.item[1] = person[1]
-    persona.item[2] = person[2]
-    persona.item[3] = person[3]
-    console.log(`Esta es la persona despues del patch ${persona.item[0]} ${persona.item[1]} ${persona.item[2]} ${persona.item[3]}`)
+    try {
+      var persona = this.patchNodeHelper(this.root, person);
+      persona.item.name = person.name
+      persona.item.dpi = person.dpi
+      persona.item.datebirth = person.datebirth
+      persona.item.address = person.address
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
   patchNodeHelper(node, person){
-    if (node === null || node.item[1] === person[1]) {
-      return node;
+    if (node === null || node.item.dpi === person.dpi) {
+      return node ? node : null;
     }
-    if (person[1] < node.item[1]) {
+    if (person.dpi < node.item.dpi) {
       return this.patchNodeHelper(node.left, person);
     } else {
       return this.patchNodeHelper(node.right, person);
