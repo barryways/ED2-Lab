@@ -1,39 +1,61 @@
-import AVLTree from "../common/avltree.js";
-const tree = new AVLTree();
 
-function InsertData(person) {
-  try {
-    tree.insertNode(person);
-    return true;
-  } catch (error) {
-    return console.log("Dato no insertado por " + error);
+class operations{
+
+  constructor(tree){
+    this.tree = tree;
   }
-}
 
-function DeleteData(person) {
-  try {
-    return tree.deleteNode(person);
-  } catch (error) {
-    return console.log("Dato no eliminado por " + error);
-  }
-}
-
-function PatchData(person) {
-  try {
-    if (tree.patch(person) !== null) {
-      return true;
+  InsertData(person) {
+    try {
+      this.tree.insertNode(person);
+      return this.tree;
+    } catch (error) {
+      return console.log("Dato no insertado por " + error);
     }
-  } catch (error) {
-    console.log("Error durante la búsqueda:", error);
+  }
+  
+  DeleteData(person) {
+    try {
+      this.tree.deleteNode(person);
+      return this.tree;
+    } catch (error) {
+      return console.log("Dato no eliminado por " + error);
+    }
+  }
+  
+  PatchData(person) {
+    try {
+      if (this.tree.patch(person) !== null) {
+        this.tree.patch(person);
+        return this.tree;
+      }
+    } catch (error) {
+      console.log("Error durante la búsqueda:", error);
+    }
+  }
+  
+  PreOrder() {
+    try {
+      this.tree.preOrder();
+      return this.tree;
+    } catch (error) {
+      console.log("Error durante el preorder:", error);
+    }
+  }
+  getJSONL(path) {
+    try {
+      if(this.tree.exportToJSONLFile(path)){
+        return true;
+      }
+      
+      return false;
+
+    } catch (error) {
+      console.log("Error durante la conversion del JSONL:", error);
+    }
   }
 }
 
-function PreOrder() {
-  try {
-    tree.preOrder();
-  } catch (error) {
-    console.log("Error durante el preorder:", error);
-  }
-}
 
-export { InsertData, DeleteData, PatchData, PreOrder };
+
+export default operations;

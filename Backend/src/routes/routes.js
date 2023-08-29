@@ -1,13 +1,14 @@
 import express from "express";
 const router = express.Router();
 import csvParser from "../util/csvParser.js";
-import treeCharger from "../controllers/lab1.controller.js";
+import {treeCharger,getData} from "../controllers/lab1.controller.js";
 
 //localhost:4000/api/lab1/getdata/
 router.route('/avl/').get(csvParser);
 //localhost:4000/api/lab1/avl/
 router.route('/importacion/').get(treeCharger);
 //localhost:4000/api/lab1/pruebaDato/
+router.route('/pruebaDato/').get(getData);
 
 
 export default router;

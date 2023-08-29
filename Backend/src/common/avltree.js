@@ -1,4 +1,6 @@
 // node class
+import fs from 'fs';
+
 class Node {
   constructor(item) {
     this.item = item;
@@ -213,6 +215,24 @@ class AVLTree {
     } else {
       return this.patchNodeHelper(node.right, person);
     }
+  }
+
+  convertToJSONL(node, outputStream) {
+    if (node) {
+      const jsonStr = JSON.stringify(node.item);
+      outputStream.write(jsonStr + '\n');
+
+      this.convertToJSONL(node.left, outputStream);
+      this.convertToJSONL(node.right, outputStream);
+    }
+  }
+
+  // Export AVL tree items to a JSONL file
+  exportToJSONLFile(filename) {
+    const outputStream = fs.createWriteStream(filename);
+    this.convertToJSONL(this.root, outputStream);
+    outputStream.end();
+    return true;
   }
 }
 
