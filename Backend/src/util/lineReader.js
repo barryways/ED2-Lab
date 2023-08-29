@@ -1,15 +1,14 @@
 import Person from "../models/person.js";
 import { InsertData, DeleteData, PatchData } from "./operation.js";
 
-function processLine(line) {
-  const [command, jsonData] = line.split(";");
-  const parsedData = JSON.parse(jsonData);
+function processLine(record) {
+  const parsedData = JSON.parse(record.json);
   const person = new Person(
     parsedData.name,
     parsedData.dpi,
     parsedData.datebirth,
     parsedData.address
-  );
+    );
 
   try {
     if (command === "INSERT") {

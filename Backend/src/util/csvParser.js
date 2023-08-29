@@ -1,4 +1,5 @@
 import fs from "fs";
+import csvRecords from './csvRecords.js'
 
 export default function csvParser(path) {
   try {
@@ -10,8 +11,9 @@ export default function csvParser(path) {
       }
       const lines = data.trim().split("\n");
       for (const line of lines) {
-        let 
-        records.push(line);
+        const [command, jsonData] = line.split(";");
+        const record = new csvRecords(command, jsonData);
+        records.push(record);
       }
     });
     return records;

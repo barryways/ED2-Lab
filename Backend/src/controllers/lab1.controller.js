@@ -2,25 +2,17 @@ import csvParser from "../util/csvParser.js";
 import asyncHandler from "express-async-handler";
 import { PreOrder } from "../util/operation.js";
 
-
 const treeCharger = asyncHandler(async (req, res) => {
   try {
     const path = "./src/data/input.csv";
-    if(csvParser(path)){
-        const records = csvParser(path);
-        for (const record of records) {
-          
-        }
-
+    const records = csvParser(path);
+    for (let record of records) {
+      console.log(record);
     }
-    else{
-      console.log('Error al cargar el archivo')
-    }
-    res.send('Arbol cargado')
+    res.send(records);
   } catch (error) {
     console.log(`Ocurrio un error ${error}`);
   }
 });
-
 
 export default treeCharger;
