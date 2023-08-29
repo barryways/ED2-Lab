@@ -7,16 +7,14 @@ import AVLTree from "../common/avltree.js";
 const tree = new AVLTree();
 const operation = new operations(tree);
 
-
 function processLine(record) {
-
   const parsedData = JSON.parse(record.json);
   const person = new Person(
     parsedData.name,
     parsedData.dpi,
     parsedData.datebirth,
     parsedData.address
-    );
+  );
 
   try {
     if (record.operation === "INSERT") {
@@ -48,15 +46,38 @@ const treeCharger = asyncHandler(async (req, res) => {
 
 const getData = asyncHandler(async (req, res) => {
   try {
-    if(operation.getJSONL('output.jsonl')){
-      res.send('Datos cargados correctamente');
+    if (operation.getJSONL("output.jsonl")) {
+      res.send("Datos cargados correctamente");
     }
-    
-    
   } catch (error) {
-    res.send(`No se pudo ejecutar la operacion debido a ${error}`)
+    res.send(`No se pudo ejecutar la operacion debido a ${error}`);
   }
 });
 
+const searchByName = asyncHandler(async (req, res) => {
+  try {
+    const name = req.params.name.toLowerCase().trim();;
+    const result = operation.searchByName(name);
+    if(result.length === 0){
+      res.send('No se encontraron datos')
+    }
+    else{
+      res.send(result);
+    }
+  } catch (error) {
+    res.send(`No se pudo ejecutar la operacion debido a ${error}`);
+  }
+});
 
-export {treeCharger, getData};
+const searchByDPI = asyncHandler(async (req, res) => {
+  try {
+    const dpi = req.params.dpi.trim();
+    const result = operation.searchByDpi(dpi);
+    console.log(result)
+    res.send(result);
+  } catch (error) {
+    res.send(`No se pudo ejecutar la operacion debido a ${error}`);
+  }
+});
+
+export { treeCharger, getData, searchByName, searchByDPI };

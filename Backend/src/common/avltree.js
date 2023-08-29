@@ -234,6 +234,60 @@ class AVLTree {
     outputStream.end();
     return true;
   }
+  searchByDpi(dpi) {
+    return this.searchByDpiHelper(this.root,dpi);
+  }
+  searchByDpiHelper(node, dpi) {
+    if (node) {
+      if (node.item.dpi === dpi) {
+        const result = [
+          node.item.name,
+          node.item.dpi,
+          node.item.datebirth,
+          node.item.address,
+        ];
+        console.log(`result: ${result}`);
+        return result;
+      }
+      
+      const leftResult = this.searchByDpiHelper(node.left, dpi);
+      if (leftResult) {
+        return leftResult;
+      }
+      
+      const rightResult = this.searchByDpiHelper(node.right, dpi);
+      if (rightResult) {
+        return rightResult;
+      }
+    }
+    return null;
+  }
+  
+  searchByName(name) {
+    const results = [];
+    this.searchByNameHelper(this.root, name, results);
+    return results;
+  }
+  
+  searchByNameHelper(node, name, results) {
+    if (node) {
+      if (node.item.name === name) {
+        const result = [
+          node.item.name,
+          node.item.dpi,
+          node.item.datebirth,
+          node.item.address,
+        ];
+        results.push(result);
+      }
+  
+      this.searchByNameHelper(node.left, name, results);
+      this.searchByNameHelper(node.right, name, results);
+    }
+  }
+  
+
+
 }
 
 export default AVLTree;

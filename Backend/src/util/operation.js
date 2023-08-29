@@ -1,7 +1,5 @@
-
-class operations{
-
-  constructor(tree){
+class operations {
+  constructor(tree) {
     this.tree = tree;
   }
 
@@ -13,7 +11,7 @@ class operations{
       return console.log("Dato no insertado por " + error);
     }
   }
-  
+
   DeleteData(person) {
     try {
       this.tree.deleteNode(person);
@@ -22,7 +20,7 @@ class operations{
       return console.log("Dato no eliminado por " + error);
     }
   }
-  
+
   PatchData(person) {
     try {
       if (this.tree.patch(person) !== null) {
@@ -33,7 +31,7 @@ class operations{
       console.log("Error durante la búsqueda:", error);
     }
   }
-  
+
   PreOrder() {
     try {
       this.tree.preOrder();
@@ -44,18 +42,35 @@ class operations{
   }
   getJSONL(path) {
     try {
-      if(this.tree.exportToJSONLFile(path)){
+      if (this.tree.exportToJSONLFile(path)) {
         return true;
       }
-      
-      return false;
 
+      return false;
     } catch (error) {
       console.log("Error durante la conversion del JSONL:", error);
     }
   }
+
+  searchByName(name) {
+    try {
+      const result = this.tree.searchByName(name);
+      return result;
+    } catch (error) {
+      console.log("Error durante la búsqueda:", error);
+    }
+  }
+  searchByDpi(dpi) {
+    try {
+      const result = this.tree.searchByDpi(dpi);
+      if(this.tree.searchByDpi(dpi) !== null){
+        return result;
+      }
+      return result;
+    } catch (error) {
+      console.log("Error durante la búsqueda:", error);
+    }
+  }
 }
-
-
 
 export default operations;
