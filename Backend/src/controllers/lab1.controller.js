@@ -46,7 +46,7 @@ const treeCharger = asyncHandler(async (req, res) => {
 
 const getData = asyncHandler(async (req, res) => {
   try {
-    if (operation.getJSONL("output.jsonl")) {
+    if (operation.getJSONL("./src/data/output.jsonl")) {
       res.send("Datos cargados correctamente");
     }
   } catch (error) {
@@ -56,12 +56,11 @@ const getData = asyncHandler(async (req, res) => {
 
 const searchByName = asyncHandler(async (req, res) => {
   try {
-    const name = req.params.name.toLowerCase().trim();;
+    const name = req.params.name.toLowerCase().trim();
     const result = operation.searchByName(name);
-    if(result.length === 0){
-      res.send('No se encontraron datos')
-    }
-    else{
+    if (result.length === 0) {
+      res.send("No se encontraron datos");
+    } else {
       res.send(result);
     }
   } catch (error) {
@@ -73,11 +72,48 @@ const searchByDPI = asyncHandler(async (req, res) => {
   try {
     const dpi = req.params.dpi.trim();
     const result = operation.searchByDpi(dpi);
-    console.log(result)
+    console.log(result);
     res.send(result);
   } catch (error) {
     res.send(`No se pudo ejecutar la operacion debido a ${error}`);
   }
 });
 
-export { treeCharger, getData, searchByName, searchByDPI };
+const deleteByNameDpi = asyncHandler(async (req, res) => {
+  try {
+    const name = req.params.name.trim();
+    const dpi = req.params.dpi;
+    console.log(name)
+    const result = operation.deleteByNameDpi(name, dpi);
+    let validation = 0;
+    if (result !== null) {
+      validation =1;
+    }
+    res.send(`Se logro evaluar ${validation}`);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const searchByNameDpi = asyncHandler(async (req, res) => {
+  try {
+    const dpi = req.params.dpi.trim();
+    const name = req.params.name;
+
+    const result = operation.searchByDpi(dpi);
+    console.log(result);
+    res.send(result);
+  } catch (error) {
+    console.log(error)
+  }
+
+});
+
+export {
+  treeCharger,
+  getData,
+  searchByName,
+  searchByDPI,
+  searchByNameDpi,
+  deleteByNameDpi,
+};
