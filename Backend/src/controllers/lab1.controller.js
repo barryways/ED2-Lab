@@ -12,7 +12,7 @@ function processLine(record) {
   const person = new Person(
     parsedData.name,
     parsedData.dpi,
-    parsedData.datebirth,
+    parsedData.dateBirth,
     parsedData.address
   );
 
@@ -33,12 +33,21 @@ function processLine(record) {
 
 const treeCharger = asyncHandler(async (req, res) => {
   try {
-    const path = "./src/data/input.csv";
+    let validacion = "Arbol no cargado";
+    const path = "./src/data/datos.txt";
     const records = await csvParser(path);
+    let isFirstRecord = true;
+
     for (const record of records) {
+      if (isFirstRecord) {
+        isFirstRecord = false;
+        continue; // Saltar el primer registro
+      }
+  
       processLine(record);
     }
-    res.send("Datos cargados correctamente");
+    validacion = "Arbol cargado correctamente";
+    res.send(validacion);
   } catch (error) {
     console.log(`Ocurrio un error ${error}`);
   }
@@ -46,9 +55,14 @@ const treeCharger = asyncHandler(async (req, res) => {
 
 const getData = asyncHandler(async (req, res) => {
   try {
+    let validacion =""
     if (operation.getJSONL("output.jsonl")) {
-      res.send("Datos cargados correctamente");
+      validacion = "Datos cargados correctamente en el archivo jsonl";
     }
+    else{
+      validacion = "No se pudo cargar los datos";
+    }
+    res.send(validacion);
   } catch (error) {
     res.send(`No se pudo ejecutar la operacion debido a ${error}`);
   }

@@ -56,6 +56,7 @@ class AVLTree {
     }
 
     if (item.dpi < node.item.dpi) {
+      //console.log(node.item.dpi)
       node.left = this.insertNodeHelper(node.left, item);
     } else if (item.dpi > node.item.dpi) {
       node.right = this.insertNodeHelper(node.right, item);
@@ -197,10 +198,14 @@ class AVLTree {
   patch(person) {
     try {
       var persona = this.patchNodeHelper(this.root, person);
-      persona.item.name = person.name;
-      persona.item.dpi = person.dpi;
-      persona.item.datebirth = person.datebirth;
-      persona.item.address = person.address;
+      if (person.datebirth !== undefined && person.datebirth !== null) {
+        persona.item.datebirth = person.datebirth;
+      }
+  
+      // Actualizar 'address' solo si se proporciona en 'person'
+      if (person.address !== undefined && person.address !== null) {
+        persona.item.address = person.address;
+      }
       return true;
     } catch (error) {
       return false;
@@ -282,7 +287,8 @@ class AVLTree {
       }
   
       this.searchByNameHelper(node.left, name, results);
-      this.searchByNameHelper(node.right, name, results);
+      this.searchByNameHelper(node.right, name, results);google
+      
     }
   }
   
