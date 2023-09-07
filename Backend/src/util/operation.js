@@ -71,6 +71,15 @@ class operations {
       console.log("Error durante la búsqueda:", error);
     }
   }
+  deleteByNameDpi(name, dpi){
+    try {
+      const result = this.tree.searchByDpi(dpi)
+      this.tree.deleteNode(result);
+      return result;
+    } catch (error) {
+      console.log(`Se obtuvo este error ${error}`);
+    }
+  }
 }
 
 export default operations;

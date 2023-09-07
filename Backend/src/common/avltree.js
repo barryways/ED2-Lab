@@ -251,7 +251,7 @@ class AVLTree {
           node.item.datebirth,
           node.item.address,
         ];
-        console.log(`result: ${result}`);
+        console.log(`resultado del nodo: ${result}`);
         return result;
       }
       
@@ -292,6 +292,20 @@ class AVLTree {
     }
   }
   
+  deleteByNameDpi(name, dpi){
+    try {
+      const node = this.searchByDpi(dpi);
+
+      if(node.item.name == name.toLowerCase().trim()){
+        this.deleteNode(node);
+        return true;
+      }
+      return false;
+
+    } catch (error) {
+      return error;
+    }
+  }
 
 
 }
