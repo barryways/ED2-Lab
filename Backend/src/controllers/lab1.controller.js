@@ -115,7 +115,7 @@ const searchByNameDpi = asyncHandler(async (req, res) => {
     const dpi = req.params.dpi.trim();
     const name = req.params.name;
 
-    const result = operation.searchByDpi(dpi);
+    const result = operation.searchByNameDpi(dpi, name);
     console.log(result);
     res.send(result);
   } catch (error) {

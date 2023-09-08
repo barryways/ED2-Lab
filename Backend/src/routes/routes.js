@@ -14,7 +14,7 @@ router.route('/searchByDPI/:dpi').get(searchByDPI);
 //localhost:4000/api/lab1/searchByDPI/:dpi
 router.route('/searchByNameDPI/:name/:dpi').get(searchByNameDpi);
 //localhost:4000/api/lab1/searchByName/:name
-router.route('/deleteByNameDpi/:name/:dpi').get(deleteByNameDpi);
+router.route('/deleteByNameDPI/:name/:dpi').get(deleteByNameDpi);
 //localhost:4000/api/lab1/searchByDPI/:dpi
 
 export default router;

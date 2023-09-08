@@ -93,7 +93,7 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <img src='./src/imgs/logo2.png' width={350} />
           <Typography
             variant="h5"
             noWrap

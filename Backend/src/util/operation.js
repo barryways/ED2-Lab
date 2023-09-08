@@ -71,6 +71,20 @@ class operations {
       console.log("Error durante la búsqueda:", error);
     }
   }
+  searchByNameDpi(dpi, name) {
+    try {
+      const result = this.tree.searchByDpi(dpi);
+      if(this.tree.searchByDpi(dpi) !== null){
+        if(result[0] != name)  {
+            return "No coincide el nombre con el DPI"
+        }
+        return result;
+      }
+      return result;
+    } catch (error) {
+      console.log("Error durante la búsqueda:", error);
+    }
+  }
   deleteByNameDpi(name, dpi){
     try {
       const result = this.tree.searchByDpi(dpi)
