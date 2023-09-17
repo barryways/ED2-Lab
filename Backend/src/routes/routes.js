@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import csvParser from "../util/csvParser.js";
-import {treeCharger,getData,searchByDPI, searchByName,searchByNameDpi, deleteByNameDpi } from "../controllers/lab1.controller.js";
+import {treeCharger,getData,searchByDPI, searchByName,searchByNameDpi, deleteByNameDpi, pruebaLZ78 } from "../controllers/lab1.controller.js";
 
 
 router.route('/importacion/').get(treeCharger);
@@ -16,5 +16,8 @@ router.route('/searchByNameDPI/:name/:dpi').get(searchByNameDpi);
 //localhost:4000/api/lab1/searchByName/:name
 router.route('/deleteByNameDPI/:name/:dpi').get(deleteByNameDpi);
 //localhost:4000/api/lab1/searchByDPI/:dpi
+router.route('/LZ/').get(pruebaLZ78);
+
+
 
 export default router;

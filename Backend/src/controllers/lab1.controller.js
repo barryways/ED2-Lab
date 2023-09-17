@@ -3,17 +3,22 @@ import asyncHandler from "express-async-handler";
 import Person from "../models/person.js";
 import operations from "../util/operation.js";
 import AVLTree from "../common/avltree.js";
+import coder from "../util/decoder.js";
+import { compress, decompress } from "../common/lz78.js";
+import array_log_writer from "../util/logWriter.js";
 
 const tree = new AVLTree();
 const operation = new operations(tree);
+const lz78 = new coder();
 
 function processLine(record) {
   const parsedData = JSON.parse(record.json);
   const person = new Person(
     parsedData.name,
     parsedData.dpi,
-    parsedData.dateBirth,
-    parsedData.address
+    parsedData.datebirth,
+    parsedData.address,
+    parsedData.companies
   );
 
   try {
@@ -34,16 +39,11 @@ function processLine(record) {
 const treeCharger = asyncHandler(async (req, res) => {
   try {
     let validacion = "Arbol no cargado";
-    const path = "./src/data/datos.txt";
+    const path = "./src/data/input(1).csv";
     const records = await csvParser(path);
-    let isFirstRecord = true;
 
-    for (const record of records) {
-      if (isFirstRecord) {
-        isFirstRecord = false;
-        continue; // Saltar el primer registro
-      }
-  
+
+    for (const record of records) { 
       processLine(record);
     }
     validacion = "Arbol cargado correctamente";
@@ -87,8 +87,14 @@ const searchByDPI = asyncHandler(async (req, res) => {
   try {
     const dpi = req.params.dpi.trim();
     const result = operation.searchByDpi(dpi);
-    console.log(result);
-    res.send(result);
+
+    const texto_unificado = lz78.texto_codificacion(result);
+    const texto_codificado= compress(texto_unificado);
+    array_log_writer(texto_codificado);
+    const texto_decodificado= decompress(texto_codificado);
+    array_log_writer(texto_decodificado);
+    console.log(texto_decodificado)
+    res.send(`a la empresa se le debe mostrar \' ${texto_codificado} \' \n---------\n el texto es \' ${texto_decodificado} \' \n---------\n y la persona es ${result[0]} \n con el numero de DPI ${result[1]} \n la fecha ${result[2]} \n y la direccion ${result[3]}  `);
   } catch (error) {
     res.send(`No se pudo ejecutar la operacion debido a ${error}`);
   }
@@ -124,6 +130,15 @@ const searchByNameDpi = asyncHandler(async (req, res) => {
 
 });
 
+const pruebaLZ78 = asyncHandler(async (req, res) => {
+  try {
+    console.log(decompress(compress('Barryways')));
+    res.send('Ok Lets go');
+  } catch (error) {
+    console.log(error)
+  }
+});
+
 export {
   treeCharger,
   getData,
@@ -131,4 +146,5 @@ export {
   searchByDPI,
   searchByNameDpi,
   deleteByNameDpi,
+  pruebaLZ78,
 };

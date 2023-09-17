@@ -250,8 +250,9 @@ class AVLTree {
           node.item.dpi,
           node.item.datebirth,
           node.item.address,
+          node.item.companies
         ];
-        console.log(`resultado del nodo: ${result}`);
+        //console.log(`resultado del nodo: ${result}`);
         return result;
       }
       
@@ -287,7 +288,7 @@ class AVLTree {
       }
   
       this.searchByNameHelper(node.left, name, results);
-      this.searchByNameHelper(node.right, name, results);google
+      this.searchByNameHelper(node.right, name, results);
       
     }
   }
