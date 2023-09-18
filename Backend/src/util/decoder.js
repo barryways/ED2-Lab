@@ -3,33 +3,21 @@ import lz78 from "../common/lz78.js";
 const LZ78 = new lz78();
 export default class coder {
   constructor() {}
-  texto_codificacion(array) {
+  texto_decodificacion(codificado_empresa) {
     try {
       let dpiEmpresa = "",
-        codificadoEmpresas = [],
-        verification = true;
-
-      dpiEmpresa += array[1] + "_";
-      console.log(dpiEmpresa);
-      const codificado_empresa = this.codificacion_por_empresa(
-        dpiEmpresa,
-        array[4]
-      );
-      console.log(codificado_empresa);
-      let contador = 0;
-      codificado_empresa.forEach((element) => {
-        const texto_comprimido = LZ78.compress(element);
-        const texto_descomprimido = LZ78.decompress(texto_comprimido);
+      decodificadoEmpresas = [];
+        
+      codificado_empresa[4].forEach((element) => {
+        const texto_comprimido = element;
+        const texto_descomprimido = LZ78.decompress(element);
         array_log_writer(
           `El texto comprimido es: \'${texto_comprimido}\'\nPara el texto descomprimido \'${texto_descomprimido}\'`
         );
+        decodificadoEmpresas.push(texto_descomprimido);
       });
 
-      if (verification) {
-        return "codificacion perfecta";
-      } else {
-        return "codificacion con errores";
-      }
+      return decodificadoEmpresas;
     } catch (error) {
       return error;
     }
@@ -47,6 +35,21 @@ export default class coder {
       return result;
     } catch (error) {
       console.log(error);
+    }
+  }
+  codificacion_persona(person) {
+    try {
+      const espacioVacio = "",
+      codificadoEmpresas = [];
+      person.companies.forEach(element => {
+        let espacio_vacio = espacioVacio;
+        const dpi_empresa = LZ78.compress(element += espacio_vacio);
+      
+        codificadoEmpresas.push(dpi_empresa)
+      });
+      return codificadoEmpresas;
+    } catch (error) {
+      return error;
     }
   }
 }

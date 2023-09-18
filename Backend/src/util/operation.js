@@ -1,3 +1,5 @@
+import coder from "../util/decoder.js";
+const Coder = new coder
 class operations {
   constructor(tree) {
     this.tree = tree;
@@ -5,6 +7,7 @@ class operations {
 
   InsertData(person) {
     try {
+      person.companies = Coder.codificacion_persona(person);
       this.tree.insertNode(person);
       return this.tree;
     } catch (error) {
