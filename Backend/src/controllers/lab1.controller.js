@@ -84,8 +84,8 @@ const searchByDPI = asyncHandler(async (req, res) => {
   try {
     const dpi = req.params.dpi.trim();
     const result = operation.searchByDpi(dpi);
-    const textoCodificado = decoder.texto_codificacion(result); // Almacena el resultado en una variable.
-    res.send(`la persona es ${result[0]} \n con el numero de DPI ${result[1]} \n la fecha ${result[2]} \n y la direccion ${result[3]}\n${textoCodificado}`);
+    const texto_decodificado = decoder.texto_decodificacion(result); // Almacena el resultado en una variable.
+    res.send(`la persona es ${result[0]} \n con el numero de DPI ${result[1]} \n la fecha ${result[2]} \n y la direccion ${result[3]}\n estas son las empresas ${texto_decodificado}`);
   } catch (error) {
     res.send(`No se pudo ejecutar la operación debido a ${error}`);
   }
