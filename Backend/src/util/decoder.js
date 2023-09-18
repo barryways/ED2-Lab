@@ -10,12 +10,12 @@ export default class coder {
         verification = true;
 
       dpiEmpresa += array[1] + "_";
-      console.log(dpiEmpresa);
+      //console.log(dpiEmpresa);
       const codificado_empresa = this.codificacion_por_empresa(
         dpiEmpresa,
         array[4]
       );
-      console.log(codificado_empresa);
+      //console.log(codificado_empresa);
       let contador = 0;
       codificado_empresa.forEach((element) => {
         const texto_comprimido = LZ78.compress(element);
@@ -47,6 +47,21 @@ export default class coder {
       return result;
     } catch (error) {
       console.log(error);
+    }
+  }
+  codificacion_persona(person) {
+    try {
+      let dpiEmpresa = person[1] + "_",
+      codificadoEmpresas = []
+      person.companies.forEach(element => {
+        let dpi_solitario = dpiEmpresa;
+        const dpi_empresa = LZ78.compress(dpi_solitario+= element);
+        codificadoEmpresas.push(dpi_empresa)
+      });
+      //console.log(codificadoEmpresas);
+      return codificadoEmpresas;
+    } catch (error) {
+      return error;
     }
   }
 }
