@@ -4,12 +4,12 @@ import Person from "../models/person.js";
 import operations from "../util/operation.js";
 import AVLTree from "../common/avltree.js";
 import coder from "../util/decoder.js";
-import { compress, decompress } from "../common/lz78.js";
-import array_log_writer from "../util/logWriter.js";
+import lz78 from "../common/lz78.js";
+const LZ78 = new lz78();
 
 const tree = new AVLTree();
 const operation = new operations(tree);
-const lz78 = new coder();
+const decoder = new coder();
 
 function processLine(record) {
   const parsedData = JSON.parse(record.json);
@@ -42,8 +42,7 @@ const treeCharger = asyncHandler(async (req, res) => {
     const path = "./src/data/input(1).csv";
     const records = await csvParser(path);
 
-
-    for (const record of records) { 
+    for (const record of records) {
       processLine(record);
     }
     validacion = "Arbol cargado correctamente";
@@ -55,12 +54,10 @@ const treeCharger = asyncHandler(async (req, res) => {
 
 const getData = asyncHandler(async (req, res) => {
   try {
-    let validacion =""
+    let validacion = "";
     if (operation.getJSONL("./src/data/output.jsonl")) {
       validacion = "Datos cargados correctamente en el archivo jsonl";
-
-    }
-    else{
+    } else {
       validacion = "No se pudo cargar los datos";
     }
     res.send(validacion);
@@ -87,28 +84,23 @@ const searchByDPI = asyncHandler(async (req, res) => {
   try {
     const dpi = req.params.dpi.trim();
     const result = operation.searchByDpi(dpi);
-
-    const texto_unificado = lz78.texto_codificacion(result);
-    const texto_codificado= compress(texto_unificado);
-    array_log_writer(texto_codificado);
-    const texto_decodificado= decompress(texto_codificado);
-    array_log_writer(texto_decodificado);
-    console.log(texto_decodificado)
-    res.send(`a la empresa se le debe mostrar \' ${texto_codificado} \' \n---------\n el texto es \' ${texto_decodificado} \' \n---------\n y la persona es ${result[0]} \n con el numero de DPI ${result[1]} \n la fecha ${result[2]} \n y la direccion ${result[3]}  `);
+    const textoCodificado = decoder.texto_codificacion(result); // Almacena el resultado en una variable.
+    res.send(`la persona es ${result[0]} \n con el numero de DPI ${result[1]} \n la fecha ${result[2]} \n y la direccion ${result[3]}\n${textoCodificado}`);
   } catch (error) {
-    res.send(`No se pudo ejecutar la operacion debido a ${error}`);
+    res.send(`No se pudo ejecutar la operación debido a ${error}`);
   }
 });
+
 
 const deleteByNameDpi = asyncHandler(async (req, res) => {
   try {
     const name = req.params.name.trim();
     const dpi = req.params.dpi;
-    console.log(name)
+    console.log(name);
     const result = operation.deleteByNameDpi(name, dpi);
     let validation = 0;
     if (result !== null) {
-      validation =1;
+      validation = 1;
     }
     res.send(`Se logro evaluar ${validation}`);
   } catch (error) {
@@ -125,17 +117,20 @@ const searchByNameDpi = asyncHandler(async (req, res) => {
     console.log(result);
     res.send(result);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-
 });
 
 const pruebaLZ78 = asyncHandler(async (req, res) => {
   try {
-    console.log(decompress(compress('Barryways')));
-    res.send('Ok Lets go');
+    console.log(LZ78.decompress(LZ78.compress("8930953498984_Turner_LLC")));
+    console.log(LZ78.decompress(LZ78.compress("8930953498984_Mante_-_Lesch")));
+    console.log(LZ78.decompress(LZ78.compress("8930953498984_Schuster,_Olson_and_Doyle")));
+    console.log(LZ78.decompress(LZ78.compress("8930953498984_Emard_LLC")));
+    console.log(LZ78.decompress(LZ78.compress("8930953498984_Block_and_Sons")));
+    res.send("Ok Lets go");
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 });
 

@@ -197,7 +197,9 @@ class AVLTree {
 
   patch(person) {
     try {
+
       var persona = this.patchNodeHelper(this.root, person);
+      
       if (person.datebirth !== undefined && person.datebirth !== null) {
         persona.item.datebirth = person.datebirth;
       }
