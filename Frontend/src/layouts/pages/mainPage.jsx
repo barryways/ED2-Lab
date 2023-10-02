@@ -1,13 +1,11 @@
-import footerPage from '../modules/footer'
-
-export function MainPage(){
+import '/src/App.css'
+export default function MainPage(){
     return(
         <>
-            <div className="main"></div>
-            <div className="main-navbar"></div>
-            <div className="main-content"></div>
-            <div className="main-footer">
-            <footerPage/>
+            <div className="Main">
+                <div className="Banner">
+                    <h1>Holas</h1>
+                </div>
             </div>
         </>
     )
