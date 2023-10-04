@@ -5,8 +5,11 @@ import operations from "../util/operation.js";
 import AVLTree from "../common/avltree.js";
 import coder from "../util/decoder.js";
 import lz78 from "../common/lz78.js";
-const LZ78 = new lz78();
+import letter from "../services/letterService.js";
+import encrypter from "../util/encrypter.js";
 
+const Letter = new letter();
+const Encrypter = new encrypter();
 const tree = new AVLTree();
 const operation = new operations(tree);
 const decoder = new coder();
@@ -39,7 +42,7 @@ function processLine(record) {
 const treeCharger = asyncHandler(async (req, res) => {
   try {
     let validacion = "Arbol no cargado";
-    const path = "./src/data/input(1).csv";
+    const path = "./src/data/input(2).csv";
     const records = await csvParser(path);
 
     for (const record of records) {
@@ -121,14 +124,11 @@ const searchByNameDpi = asyncHandler(async (req, res) => {
   }
 });
 
-const pruebaLZ78 = asyncHandler(async (req, res) => {
+const searchLetterByDPI = asyncHandler(async (req, res) => {
   try {
-    console.log(LZ78.decompress(LZ78.compress("8930953498984_Turner_LLC")));
-    console.log(LZ78.decompress(LZ78.compress("8930953498984_Mante_-_Lesch")));
-    console.log(LZ78.decompress(LZ78.compress("8930953498984_Schuster,_Olson_and_Doyle")));
-    console.log(LZ78.decompress(LZ78.compress("8930953498984_Emard_LLC")));
-    console.log(LZ78.decompress(LZ78.compress("8930953498984_Block_and_Sons")));
-    res.send("Ok Lets go");
+    const dpi = req.params.dpi;
+    const cartasPorPersona = Letter.obtenerContenidoArchivos(dpi);
+    res.json({ cartasPorPersona }); 
   } catch (error) {
     console.log(error);
   }
@@ -141,5 +141,5 @@ export {
   searchByDPI,
   searchByNameDpi,
   deleteByNameDpi,
-  pruebaLZ78,
+  searchLetterByDPI,
 };
