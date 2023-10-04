@@ -1,15 +1,13 @@
 import fs from "fs";
 import path from "path";
 import encrypter from "../util/encrypter.js";
-import lz78 from "../common/lz78.js";
 
-const lz = new lz78();
 export default class letter {
   constructor() {
     this.encrypter = new encrypter();
     this.contenidoCifrado = [];
   }
-  obtenerContenidoArchivos(dpi) {
+  getLetterContent(dpi) {
     try {
       const carpeta = "./src/data/inputs";
       const archivos = fs.readdirSync(carpeta);
@@ -26,7 +24,7 @@ export default class letter {
             const rutaArchivo = path.join(carpeta, archivo);
             let contenido = fs.readFileSync(rutaArchivo, "utf-8");
             contenidoArchivos.push(contenido);
-            contenido = this.encrypter.cifradoPorColumnaSimple(contenido);
+            contenido = this.encrypter.simpleColumnCypher(contenido);
             this.contenidoCifrado.push(contenido);
           }
         }
@@ -39,19 +37,20 @@ export default class letter {
     }
   }
 
-  guardarContenidoEnJSON() {
+  saveCypherOnTxt(dpi) {
     try {
-
       if (this.contenidoCifrado) {
-        const jsonOutput = JSON.stringify(this.contenidoCifrado);
-        fs.writeFileSync("./src/data/cypherLetters.json", jsonOutput, "utf-8");
-        console.log(`Contenido de archivos guardado en \'./src/data/cypherLetters.json\'`);
+        this.contenidoCifrado.forEach((contenido, index) => {
+          const numeroCarta = index + 1;
+          const nombreArchivo = `REC-${dpi}-${numeroCarta}-cypher.txt`;
+          const rutaArchivo = path.join("./src/data/cyphers", nombreArchivo);
+          fs.writeFileSync(rutaArchivo, contenido, "utf-8");
+        });
       } else {
         console.error("No se pudo obtener el contenido de los archivos.");
       }
     } catch (error) {
-      console.error("Error al guardar el contenido en JSON:", error);
+      console.error("Error al guardar el contenido en archivos:", error);
     }
   }
-
 }

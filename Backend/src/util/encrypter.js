@@ -1,77 +1,71 @@
-import lz78 from "../common/lz78.js";
-
-const lz = new lz78();
-
+import { config } from "dotenv";
+config();
 export default class encrypter {
   constructor() {
-    this.clave = "clavesecreta";
+    this.clave = process.env.LETTER_KEY;
   }
-  // Función para cifrar un mensaje usando el cifrado de transposición por columna simple
-  cifradoPorColumnaSimple(mensaje) {
-    const mensajeLimpio = mensaje.replace(/\s/g, "_"); // Reemplaza espacios por guiones bajos
-    const numColumnas = this.clave.length;
-    const numFilas = Math.ceil(mensajeLimpio.length / numColumnas);
+  simpleColumnCypher(mensaje) {
+    const mensajeLimpio = mensaje.replace(/\s/g, "_");
+    const noColumns = this.clave.length;
+    const noRows = Math.ceil(mensajeLimpio.length / noColumns);
 
-    const matriz = new Array(numFilas);
+    const cypherMatrix = new Array(noRows);
 
-    for (let i = 0; i < numFilas; i++) {
-      matriz[i] = new Array(numColumnas);
+    for (let i = 0; i < noRows; i++) {
+      cypherMatrix[i] = new Array(noColumns);
     }
 
     let index = 0;
 
-    for (let i = 0; i < numFilas; i++) {
-      for (let j = 0; j < numColumnas; j++) {
+    for (let i = 0; i < noRows; i++) {
+      for (let j = 0; j < noColumns; j++) {
         if (index < mensajeLimpio.length) {
-          matriz[i][j] = mensajeLimpio[index];
+          cypherMatrix[i][j] = mensajeLimpio[index];
           index++;
         } else {
-          matriz[i][j] = "_";
+          cypherMatrix[i][j] = "_";
         }
       }
     }
 
-    let mensajeCifrado = "";
+    let codedMessage = "";
 
-    for (let j = 0; j < numColumnas; j++) {
-      for (let i = 0; i < numFilas; i++) {
-        mensajeCifrado += matriz[i][j];
+    for (let j = 0; j < noColumns; j++) {
+      for (let i = 0; i < noRows; i++) {
+        codedMessage += cypherMatrix[i][j];
       }
     }
 
-    return mensajeCifrado;
+    return codedMessage;
   }
 
-  // Función para descifrar un mensaje cifrado con el cifrado de transposición por columna simple
-  descifradoPorColumnaSimple(mensajeCifrado) {
-    const numColumnas = this.clave.length;
-    const numFilas = Math.ceil(mensajeCifrado.length / numColumnas);
+  simpleColumnDecipher(codedMessage) {
+    const noColumns = this.clave.length;
+    const noRows = Math.ceil(codedMessage.length / noColumns);
 
-    const matriz = new Array(numFilas);
+    const cypherMatrix = new Array(noRows);
 
-    for (let i = 0; i < numFilas; i++) {
-      matriz[i] = new Array(numColumnas);
+    for (let i = 0; i < noRows; i++) {
+      cypherMatrix[i] = new Array(noColumns);
     }
 
     let index = 0;
 
-    for (let j = 0; j < numColumnas; j++) {
-      for (let i = 0; i < numFilas; i++) {
-        matriz[i][j] = mensajeCifrado[index];
+    for (let j = 0; j < noColumns; j++) {
+      for (let i = 0; i < noRows; i++) {
+        cypherMatrix[i][j] = codedMessage[index];
         index++;
       }
     }
 
-    let mensajeOriginal = "";
-
-    for (let i = 0; i < numFilas; i++) {
-      for (let j = 0; j < numColumnas; j++) {
-        mensajeOriginal += matriz[i][j];
+    let originalMessage = "";
+    for (let i = 0; i < noRows; i++) {
+      for (let j = 0; j < noColumns; j++) {
+        originalMessage += cypherMatrix[i][j];
       }
     }
+    originalMessage = originalMessage.replace(/_/g, " ");
 
-    mensajeOriginal = mensajeOriginal.replace(/_/g, " "); // Reemplaza guiones bajos por espacios en blanco
-
-    return mensajeOriginal.trim();
+    return originalMessage.trim();
   }
 }

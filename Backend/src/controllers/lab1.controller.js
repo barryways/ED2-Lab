@@ -4,12 +4,8 @@ import Person from "../models/person.js";
 import operations from "../util/operation.js";
 import AVLTree from "../common/avltree.js";
 import coder from "../util/decoder.js";
-import lz78 from "../common/lz78.js";
 import letter from "../services/letterService.js";
-import encrypter from "../util/encrypter.js";
-
 const Letter = new letter();
-const Encrypter = new encrypter();
 const tree = new AVLTree();
 const operation = new operations(tree);
 const decoder = new coder();
@@ -127,8 +123,8 @@ const searchByNameDpi = asyncHandler(async (req, res) => {
 const searchLetterByDPI = asyncHandler(async (req, res) => {
   try {
     const dpi = req.params.dpi;
-    const cartasPorPersona = Letter.obtenerContenidoArchivos(dpi);
-    Letter.guardarContenidoEnJSON();
+    const cartasPorPersona = Letter.getLetterContent(dpi);
+    Letter.saveCypherOnTxt(dpi);
     res.json({ cartasPorPersona }); 
   } catch (error) {
     console.log(error);
