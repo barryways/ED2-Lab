@@ -128,6 +128,7 @@ const searchLetterByDPI = asyncHandler(async (req, res) => {
   try {
     const dpi = req.params.dpi;
     const cartasPorPersona = Letter.obtenerContenidoArchivos(dpi);
+    Letter.guardarContenidoEnJSON();
     res.json({ cartasPorPersona }); 
   } catch (error) {
     console.log(error);

@@ -9,7 +9,6 @@ export default class encrypter {
   // Función para cifrar un mensaje usando el cifrado de transposición por columna simple
   cifradoPorColumnaSimple(mensaje) {
     const mensajeLimpio = mensaje.replace(/\s/g, "_"); // Reemplaza espacios por guiones bajos
-
     const numColumnas = this.clave.length;
     const numFilas = Math.ceil(mensajeLimpio.length / numColumnas);
 
