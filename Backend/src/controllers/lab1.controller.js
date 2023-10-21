@@ -5,9 +5,13 @@ import operations from "../util/operation.js";
 import AVLTree from "../common/avltree.js";
 import coder from "../util/decoder.js";
 import letter from "../services/letterService.js";
-import SimpleRSA from "../util/RSA/RSA2.js";
+import Conversation from "../services/ConversationService.js";
+//import GeneratorKey from '../util/RSA/GeneratorKey.js';
+//import RSA from '../util/RSA/RSA.js';
 
-const rsa2 = new SimpleRSA(1024n);
+//const generatorKey = new GeneratorKey();
+//const rsa = new RSA(generatorKey);
+const conversation = new Conversation();
 const Letter = new letter();
 const tree = new AVLTree();
 const operation = new operations(tree);
@@ -137,11 +141,12 @@ const searchLetterByDPI = asyncHandler(async (req, res) => {
 
 const getSignatures = asyncHandler(async (req, res) => {
   try {
-    //   const message = rsa2.encrypt(123456789n);
-    // console.log("Hola")
-    // res.json({
-    //   message
-    // });
+    const encriptacion = conversation.encryptAllConversations();
+    const salvar = conversation.saveConversationOnTxt();
+    const desencriptada = conversation.desencryptAllConversations();
+
+    res.json("Trabajo realizado");
+
   } catch (error) {
     console.log(error);
   }
