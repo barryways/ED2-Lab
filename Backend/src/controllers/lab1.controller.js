@@ -5,6 +5,9 @@ import operations from "../util/operation.js";
 import AVLTree from "../common/avltree.js";
 import coder from "../util/decoder.js";
 import letter from "../services/letterService.js";
+import SimpleRSA from "../util/RSA/RSA2.js";
+
+const rsa2 = new SimpleRSA(1024n);
 const Letter = new letter();
 const tree = new AVLTree();
 const operation = new operations(tree);
@@ -38,7 +41,7 @@ function processLine(record) {
 const treeCharger = asyncHandler(async (req, res) => {
   try {
     let validacion = "Arbol no cargado";
-    const path = "./src/data/input(2).csv";
+    const path = "./src/data/input(3).csv";
     const records = await csvParser(path);
 
     for (const record of records) {
@@ -84,12 +87,13 @@ const searchByDPI = asyncHandler(async (req, res) => {
     const dpi = req.params.dpi.trim();
     const result = operation.searchByDpi(dpi);
     const texto_decodificado = decoder.texto_decodificacion(result); // Almacena el resultado en una variable.
-    res.send(`la persona es ${result[0]} \n con el numero de DPI ${result[1]} \n la fecha ${result[2]} \n y la direccion ${result[3]}\n estas son las empresas ${texto_decodificado}`);
+    res.send(
+      `la persona es ${result[0]} \n con el numero de DPI ${result[1]} \n la fecha ${result[2]} \n y la direccion ${result[3]}\n estas son las empresas ${texto_decodificado}`
+    );
   } catch (error) {
     res.send(`No se pudo ejecutar la operación debido a ${error}`);
   }
 });
-
 
 const deleteByNameDpi = asyncHandler(async (req, res) => {
   try {
@@ -125,7 +129,19 @@ const searchLetterByDPI = asyncHandler(async (req, res) => {
     const dpi = req.params.dpi;
     const cartasPorPersona = Letter.getLetterContent(dpi);
     Letter.saveCypherOnTxt(dpi);
-    res.json({ cartasPorPersona }); 
+    res.json({ cartasPorPersona });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const getSignatures = asyncHandler(async (req, res) => {
+  try {
+    //   const message = rsa2.encrypt(123456789n);
+    // console.log("Hola")
+    // res.json({
+    //   message
+    // });
   } catch (error) {
     console.log(error);
   }
@@ -139,4 +155,5 @@ export {
   searchByNameDpi,
   deleteByNameDpi,
   searchLetterByDPI,
+  getSignatures,
 };
