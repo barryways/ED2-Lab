@@ -1,40 +1,38 @@
-// Importa la biblioteca 'crypto' para calcular el resumen (hash) del mensaje
-const crypto = require('crypto');
-
+import crypto from "crypto";
+import forge from "node-forge";
+import GeneratorKey from "./Generator.js";
 export default class FirmadorRSA {
-    constructor(generatorKey) {
-        const keys = generatorKey.getKeys();
-        this.publicKey = keys.getPublicKey();
-        this.privateKey = keys.getPrivateKey();
+  constructor() {
+    this.generator = new GeneratorKey();
+  }
+
+  firmar(privateKeyPem, message) {
+    const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+    const md = forge.md.sha256.create();
+    md.update(message, "utf8");
+    const messageHash = md.digest().getBytes();
+    const signature = privateKey.sign(md);
+
+    return {
+      hash: messageHash,
+      signature: signature,
+    };
+  }
+
+  async validar(publicKeyPem, message, digitalSignature) {
+    try {
+      const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+      const md = forge.md.sha256.create();
+      md.update(message, "utf8");
+      const messageHash = md.digest().getBytes();
+      const verificationResult = publicKey.verify(messageHash, digitalSignature);
+  
+      return verificationResult;
+    } catch (error) {
+      console.error("Error al validar la firma:", error);
+      return false; 
     }
-
-    async firmar(message) {
-        // Calcular el resumen (hash) del mensaje
-        const messageHash = crypto.createHash('sha256').update(message).digest('hex');
-
-        // Firmar el resumen con la clave privada
-        const j = this.privateKey.getJ();
-        const n = this.privateKey.getN();
-        const messageHashBigInt = BigInt('0x' + messageHash); // Convierte el hash a BigInt
-        const digitalSignature = messageHashBigInt ** j % n;
-
-        return digitalSignature.toString(16); // Convierte la firma a hexadecimal
-    }
-
-    async validar(message, digitalSignature) {
-        const messageHash = crypto.createHash('sha256').update(message).digest('hex');
-        const messageHashBigInt = BigInt('0x' + messageHash); // Convierte el hash a BigInt
-
-        const signature = BigInt('0x' + digitalSignature); // Convierte la firma a BigInt
-
-        // Desencriptar la firma digital con la clave pública
-        const k = this.publicKey.getK();
-        const n = this.publicKey.getN();
-        const decryptedSignature = signature ** k % n;
-
-        // Comparar el resumen del mensaje con la firma desencriptada
-        return messageHashBigInt === decryptedSignature;
-    }
+  }
 }
 
 // Asegúrate de que la clase PublicKey, PrivateKey y GeneratorKey estén definidas y funcionen según tus necesidades en JavaScript.

@@ -7,7 +7,8 @@ import {treeCharger,
     searchByNameDpi, 
     deleteByNameDpi, 
     searchLetterByDPI,
-    getSignatures
+    getSignatures,
+    getValidation
  } from "../controllers/lab1.controller.js";
 
 
@@ -15,8 +16,10 @@ router.route('/import/').get(treeCharger);
 //localhost:4000/api/lab1/import/
 router.route('/getData/').get(getData);
 //localhost:4000/api/lab1/getData/
-router.route('/signatures/').get(getSignatures);
-//localhost:4000/api/lab1/signatures/
+router.route('/signatures/:dpi').get(getSignatures);
+//localhost:4000/api/lab1/signatures/:dpi
+router.route('/validate/:dpi').get(getValidation);
+//localhost:4000/api/lab1/signatures/:dpi
 router.route('/searchByName/:name').get(searchByName);
 //localhost:4000/api/lab1/searchByName/:name
 router.route('/searchByDPI/:dpi').get(searchByDPI);

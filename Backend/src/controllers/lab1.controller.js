@@ -6,11 +6,9 @@ import AVLTree from "../common/avltree.js";
 import coder from "../util/decoder.js";
 import letter from "../services/letterService.js";
 import Conversation from "../services/ConversationService.js";
-//import GeneratorKey from '../util/RSA/GeneratorKey.js';
-//import RSA from '../util/RSA/RSA.js';
 
-//const generatorKey = new GeneratorKey();
-//const rsa = new RSA(generatorKey);
+
+
 const conversation = new Conversation();
 const Letter = new letter();
 const tree = new AVLTree();
@@ -141,16 +139,39 @@ const searchLetterByDPI = asyncHandler(async (req, res) => {
 
 const getSignatures = asyncHandler(async (req, res) => {
   try {
-    const encriptacion = conversation.encryptAllConversations();
-    const salvar = conversation.saveConversationOnTxt();
-    const desencriptada = conversation.desencryptAllConversations();
-
-    res.json("Trabajo realizado");
-
+    const dpi = req.params.dpi;
+    const message = operation.getConversation(dpi);
+    operation.signProcess(message, dpi);
+    res.json(message);
   } catch (error) {
     console.log(error);
   }
 });
+
+const getValidation = asyncHandler(async (req, res) => {
+  try {
+    const dpi = req.params.dpi;
+    let validaciones = [];
+    let texto = "";
+    const message = conversation.getConversationContent(dpi);
+    const messageAfterCypher = conversation.getConversationContentDecipher(dpi);
+    for (const conversacion in message) {
+      if (message.hasOwnProperty(conversacion)) {
+        const element = message[conversacion];
+        const element2 = messageAfterCypher[conversacion];
+        const validation = operation.compareHashes(element, element2);
+        validaciones.push(validation);
+      }
+    }
+    for (let i = 0; i < validaciones.length; i++) {
+       texto = `${texto} \n La conversacion ${i + 1} es ${validaciones[i]}`;
+    }
+    res.send(texto);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 
 export {
   treeCharger,
@@ -161,4 +182,5 @@ export {
   deleteByNameDpi,
   searchLetterByDPI,
   getSignatures,
+  getValidation
 };
