@@ -1,7 +1,0 @@
-.Banner{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), url(./src/imgs/BannerFront.webp));
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: auto;
-    height: 900;
-}
