@@ -1,0 +1,21 @@
+.roboto {
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.contenedor-imagen {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-image: url('../img/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/background.jpg');
+}
+
+/* Estilos adicionales para el contenido en el contenedor si es necesario */
+.contenedor-imagen h1 {
+    color: white; /* Color de texto blanco para que sea legible */
+}
+.b-radius{
+    border-radius: 20px;
+}

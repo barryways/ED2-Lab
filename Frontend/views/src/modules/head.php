@@ -10,8 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="<?php echo $url; ?>views/src/css/styles.css">
-    <script src="<?php echo $url; ?>views/src/js/app.js"></script>
+    <link rel="stylesheet" type="text/css" href="views/src/css/styles.css">
+    <script src="views/src/js/app.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,5 +19,5 @@
         href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;400;700&family=Roboto:ital,wght@0,300;1,100;1,500&display=swap"
         rel="stylesheet">
     <title>Talent Hub</title>
-    <link rel="icon" href="<?php echo $url; ?>views/src/img/icon.png">
+    <link rel="icon" href="views/src/img/icon.png">
 </head>

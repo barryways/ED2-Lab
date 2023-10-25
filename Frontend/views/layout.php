@@ -1,6 +1,6 @@
 <?php
 include "controllers/frontend.controller.php";
-include_once 'modules/head.php';
+include_once 'src/modules/head.php';
     $route = null; 
     $inicio = true;
     $controller= new frontendController();
@@ -13,17 +13,18 @@ try {
         } else if ($route == "dashboard") {
             $controller->dashboard();
             $inicio = false;
-        } else if ($route == "home") {
-            include "modules/404.php"; 
+        }else if ($route == "verification") {
+            $controller->verification();
             $inicio = false;
-        } else {
-
+        }else {
+            include "src/modules/404.php"; 
+            $inicio = false;
         }
 
     }
     if ($inicio) {
-        include "modulos/welcome.php";
+        include "src/modules/login.php";
     }
 } catch (\Throwable $th) {
-    include "modulos/welcome.php";
+    include "src/modules/login.php";
 }
