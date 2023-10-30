@@ -79,11 +79,12 @@ const getData = asyncHandler(async (req, res) => {
 const searchByName = asyncHandler(async (req, res) => {
   try {
     const name = req.params.name.toLowerCase().trim();
-    const result = operation.searchByName(name);
+    let result = operation.searchByName(name);
     if (result.length === 0) {
       res.send("No se encontraron datos");
     } else {
-      res.send(result);
+      result = decoder.decodificadoEmpresas_nombre(result);
+      res.json(result);
     }
   } catch (error) {
     res.send(`No se pudo ejecutar la operacion debido a ${error}`);
@@ -94,11 +95,11 @@ const searchByDPI = asyncHandler(async (req, res) => {
   try {
     const dpi = req.params.dpi.trim();
     const result = operation.searchByDpi(dpi);
-    const texto_decodificado = decoder.texto_decodificacion(result); // Almacena el resultado en una variable.
+    const companies_decodificado = decoder.decodificadoEmpresas(result); // Almacena el resultado en una variable.
+    result[4] = companies_decodificado; // Reemplaza el resultado de la posicion 4 por el resultado decodificado.
     res.json(
-      result 
-    //  `la persona es ${result[0]} \n con el numero de DPI ${result[1]} \n la fecha ${result[2]} \n y la direccion ${result[3]}\n estas son las empresas ${texto_decodificado}`
-    );
+      result
+      );
   } catch (error) {
     res.send(`No se pudo ejecutar la operación debido a ${error}`);
   }
@@ -106,7 +107,7 @@ const searchByDPI = asyncHandler(async (req, res) => {
 
 const deleteByNameDpi = asyncHandler(async (req, res) => {
   try {
-    const name = req.params.name.trim();
+    const name = req.params.name.toLowerCase().trim();
     const dpi = req.params.dpi;
     console.log(name);
     const result = operation.deleteByNameDpi(name, dpi);

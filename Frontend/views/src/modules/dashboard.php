@@ -22,14 +22,15 @@
         <table id="resultadoTabla" class="table">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Nombre</th>
                     <th>DPI</th>
-
+                    <th>Fecha Nacimiento</th>
+                    <th>Direccion</th>
+                    <th>Compañias</th>
                 </tr>
             </thead>
             <tbody>
-                
+
             </tbody>
         </table>
     </div>

@@ -285,6 +285,7 @@ class AVLTree {
           node.item.dpi,
           node.item.datebirth,
           node.item.address,
+          node.item.companies
         ];
         results.push(result);
       }
