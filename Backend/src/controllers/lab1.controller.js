@@ -58,15 +58,21 @@ const treeCharger = asyncHandler(async (req, res) => {
 
 const getData = asyncHandler(async (req, res) => {
   try {
-    let validacion = "";
-    if (operation.getJSONL("./src/data/output.jsonl")) {
-      validacion = "Datos cargados correctamente en el archivo jsonl";
+    const filePath = './src/data/output.jsonl'; // Ruta del archivo que deseas descargar
+
+    if (operation.getJSONL(filePath)) {
+      // Usar res.download() para enviar el archivo como descarga
+      res.download(filePath, 'archivo_datos.jsonl', (err) => {
+        if (err) {
+          console.error('Error al descargar el archivo: ', err);
+          res.status(500).send('No se pudo descargar el archivo');
+        }
+      });
     } else {
-      validacion = "No se pudo cargar los datos";
+      res.status(404).send('No se pudo cargar los datos');
     }
-    res.send(validacion);
   } catch (error) {
-    res.send(`No se pudo ejecutar la operacion debido a ${error}`);
+    res.status(500).send(`No se pudo ejecutar la operación debido a ${error}`);
   }
 });
 
@@ -89,8 +95,9 @@ const searchByDPI = asyncHandler(async (req, res) => {
     const dpi = req.params.dpi.trim();
     const result = operation.searchByDpi(dpi);
     const texto_decodificado = decoder.texto_decodificacion(result); // Almacena el resultado en una variable.
-    res.send(
-      `la persona es ${result[0]} \n con el numero de DPI ${result[1]} \n la fecha ${result[2]} \n y la direccion ${result[3]}\n estas son las empresas ${texto_decodificado}`
+    res.json(
+      result 
+    //  `la persona es ${result[0]} \n con el numero de DPI ${result[1]} \n la fecha ${result[2]} \n y la direccion ${result[3]}\n estas son las empresas ${texto_decodificado}`
     );
   } catch (error) {
     res.send(`No se pudo ejecutar la operación debido a ${error}`);

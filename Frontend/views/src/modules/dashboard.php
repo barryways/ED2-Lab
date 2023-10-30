@@ -1,38 +1,37 @@
 <body>
-    <div class="container-fluid text-center">
-        <div class="row bg-primary text-light">
-            <div class="col-md-4">
-                <h1 class="display-6">Dashboard</h1>
-            </div>
-            <div class="col-md-8 d-flex justify-content-center align-items-center">
-                <nav class="navbar">
-                    <ul class="nav nav-pills nav-fill">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" href="dashboard">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light"
-                                href="index.php?controller=dashboard&action=logout">Busqueda</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light"
-                                href="index.php?controller=dashboard&action=logout">Logout</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+    <?php include_once('header.php'); ?>
 
-
-    <div class="container-fluid text-center">
-        <div class="row bg-light text-dark">
-            <div class="col-md-6">
-                <h5>Talent Hub</h5>
-            </div>
-            <div class ="col-md-6">   
-                <p>Talent Hub Todos los derechos reservados 2023</p>
-            </div>
+    <div class="container text-center">
+        <div>
+            <h1 class="display-3">Panel de Control</h1>
+            <p class="roboto">Bienvenido al panel de control de Talent Hub estimado
+                <?php echo $_SESSION['usuario'] ?>
+            </p>
         </div>
+        <div>
+            <p>Presiona aca para importar todos los datos del input al arbol AVL</p>
+            <button id="importar" class="btn btn-primary">Importar Datos</button>
+        </div>
+        <div>
+            <h2>Búsqueda</h2>
+            <input type="text" id="busquedaInput" placeholder="Ingresa el término de búsqueda">
+            <button id="buscarDPI" class="btn btn-primary" disabled>Buscar por DPI</button>
+            <button id="buscarNombre" class="btn btn-primary" disabled>Buscar por Nombre</button>
+            <button id="buscarNombreDPI" class="btn btn-primary" disabled>Buscar por Nombre y DPI</button>
+        </div>
+        <table id="resultadoTabla" class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>DPI</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
     </div>
+    <?php include_once('footer.php'); ?>
 </body>

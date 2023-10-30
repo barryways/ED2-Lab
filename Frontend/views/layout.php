@@ -16,6 +16,9 @@ try {
         }else if ($route == "verification") {
             $controller->verification();
             $inicio = false;
+        }else if($route == "logout"){
+            $controller->logout();
+            $inicio = false;
         }else {
             include "src/modules/404.php"; 
             $inicio = false;

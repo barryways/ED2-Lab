@@ -12,6 +12,7 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="views/src/css/styles.css">
     <script src="views/src/js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,4 +21,5 @@
         rel="stylesheet">
     <title>Talent Hub</title>
     <link rel="icon" href="views/src/img/icon.png">
+
 </head>
