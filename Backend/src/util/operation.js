@@ -6,10 +6,12 @@ import FirmadorRSA from "./RSA/FirmadorRSA.js";
 import GeneratorKey from "./RSA/Generator.js";
 import path from "path";
 import fs from "fs";
+import RSA from "../common/rsa.js";
+
 const conversation = new Conversation();
 const Coder = new coder();
 const firmador = new FirmadorRSA();
-const generator = new GeneratorKey();
+
 
 class operations {
   constructor(tree) {
@@ -150,14 +152,18 @@ class operations {
 
 
   async signProcess(message, dpi) {
-    const bits = 512;
-    const keys = generator.generateRSAKeys(bits);
+    const rsa = new RSA();
+    const keys = rsa.generate(250);
+    
+    const clave_publica = keys.n; 
+    const clave_privada= keys.d; 
+
     let contador = 1;
     for (const conversacion in message) {
       if (message.hasOwnProperty(conversacion)) {
         const mensaje = message[conversacion];
         console.log(`Conversación: ${mensaje}`);
-        const { hash, signature } = firmador.firmar(keys.privateKey, mensaje);
+        const { hash, signature } = firmador.firmar(clave_privada, mensaje);
         this.escribirCSV(dpi, hash, signature, contador);
       }
       contador++;

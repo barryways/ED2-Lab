@@ -8,7 +8,8 @@ import {treeCharger,
     deleteByNameDpi, 
     searchLetterByDPI,
     getSignatures,
-    getValidation
+    getValidation,
+    rsa
  } from "../controllers/lab1.controller.js";
 
 
@@ -30,6 +31,7 @@ router.route('/deleteByNameDPI/:name/:dpi').get(deleteByNameDpi);
 //localhost:4000/api/lab1/searchByDPI/:dpi
 router.route('/getLetter/:dpi').get(searchLetterByDPI);
 //localhost:4000/api/lab1/getLetter/:dpi
+router.route('/rsa/').get(rsa);
 
 
 export default router;

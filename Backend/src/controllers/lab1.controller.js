@@ -6,8 +6,7 @@ import AVLTree from "../common/avltree.js";
 import coder from "../util/decoder.js";
 import letter from "../services/letterService.js";
 import Conversation from "../services/ConversationService.js";
-
-
+import RSA from "../common/rsa.js";
 
 const conversation = new Conversation();
 const Letter = new letter();
@@ -58,18 +57,18 @@ const treeCharger = asyncHandler(async (req, res) => {
 
 const getData = asyncHandler(async (req, res) => {
   try {
-    const filePath = './src/data/output.jsonl'; // Ruta del archivo que deseas descargar
+    const filePath = "./src/data/output.jsonl"; // Ruta del archivo que deseas descargar
 
     if (operation.getJSONL(filePath)) {
       // Usar res.download() para enviar el archivo como descarga
-      res.download(filePath, 'archivo_datos.jsonl', (err) => {
+      res.download(filePath, "archivo_datos.jsonl", (err) => {
         if (err) {
-          console.error('Error al descargar el archivo: ', err);
-          res.status(500).send('No se pudo descargar el archivo');
+          console.error("Error al descargar el archivo: ", err);
+          res.status(500).send("No se pudo descargar el archivo");
         }
       });
     } else {
-      res.status(404).send('No se pudo cargar los datos');
+      res.status(404).send("No se pudo cargar los datos");
     }
   } catch (error) {
     res.status(500).send(`No se pudo ejecutar la operación debido a ${error}`);
@@ -97,9 +96,7 @@ const searchByDPI = asyncHandler(async (req, res) => {
     const result = operation.searchByDpi(dpi);
     const companies_decodificado = decoder.decodificadoEmpresas(result); // Almacena el resultado en una variable.
     result[4] = companies_decodificado; // Reemplaza el resultado de la posicion 4 por el resultado decodificado.
-    res.json(
-      result
-      );
+    res.json(result);
   } catch (error) {
     res.send(`No se pudo ejecutar la operación debido a ${error}`);
   }
@@ -128,10 +125,7 @@ const searchByNameDpi = asyncHandler(async (req, res) => {
 
     const result = operation.searchByNameDpi(dpi, name);
     const companies_decodificado = decoder.decodificadoEmpresas(result); // Almacena el resultado en una variable.
-    console.log("Aqui no ha pasado "+result[4])
     result[4] = companies_decodificado;
-    console.log("Aqui ya paso "+result[4])
-    console.log(result);
     res.json(result);
   } catch (error) {
     console.log(error);
@@ -176,7 +170,7 @@ const getValidation = asyncHandler(async (req, res) => {
       }
     }
     for (let i = 0; i < validaciones.length; i++) {
-       texto = `${texto} \n La conversacion ${i + 1} es ${validaciones[i]}`;
+      texto = `${texto} \n La conversacion ${i + 1} es ${validaciones[i]}`;
     }
     res.send(texto);
   } catch (error) {
@@ -184,6 +178,36 @@ const getValidation = asyncHandler(async (req, res) => {
   }
 });
 
+const rsa = asyncHandler(async (req, res) => {
+  try {
+    const rsa = new RSA();
+    // Message
+    const message = "Hello, World!";
+
+    // Generate RSA keys
+    const keys = rsa.generate(250);
+
+    console.log("Keys");
+    console.log("n:", keys.n.toString()); //clave publica
+    console.log("d:", keys.d.toString()); //clave privada
+    console.log("e:", keys.e.toString());
+
+    const encoded_message = rsa.encode(message);
+    const encrypted_message = rsa.encrypt(encoded_message, keys.n, keys.e);
+    const decrypted_message = rsa.decrypt(encrypted_message, keys.d, keys.n);
+    const decoded_message = rsa.decode(decrypted_message);
+
+    console.log("Message:", message);
+    console.log("Encoded:", encoded_message.toString());
+    console.log("Encrypted:", encrypted_message.toString());
+    console.log("Decrypted:", decrypted_message.toString());
+    console.log("Decoded:", decoded_message.toString());
+    console.log();
+    console.log("Correct?", message === decoded_message);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 export {
   treeCharger,
@@ -194,5 +218,6 @@ export {
   deleteByNameDpi,
   searchLetterByDPI,
   getSignatures,
-  getValidation
+  getValidation,
+  rsa,
 };

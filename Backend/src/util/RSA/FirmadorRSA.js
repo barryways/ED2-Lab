@@ -1,10 +1,7 @@
-import crypto from "crypto";
+
 import forge from "node-forge";
-import GeneratorKey from "./Generator.js";
 export default class FirmadorRSA {
-  constructor() {
-    this.generator = new GeneratorKey();
-  }
+
 
   firmar(privateKeyPem, message) {
     const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
@@ -34,5 +31,3 @@ export default class FirmadorRSA {
     }
   }
 }
-
-// Asegúrate de que la clase PublicKey, PrivateKey y GeneratorKey estén definidas y funcionen según tus necesidades en JavaScript.
