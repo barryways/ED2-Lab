@@ -92,6 +92,7 @@ class operations {
         if (result[0] != name) {
           return "No coincide el nombre con el DPI";
         }
+        
         return result;
       }
       return result;

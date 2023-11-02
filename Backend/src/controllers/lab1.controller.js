@@ -127,8 +127,12 @@ const searchByNameDpi = asyncHandler(async (req, res) => {
     const name = req.params.name;
 
     const result = operation.searchByNameDpi(dpi, name);
+    const companies_decodificado = decoder.decodificadoEmpresas(result); // Almacena el resultado en una variable.
+    console.log("Aqui no ha pasado "+result[4])
+    result[4] = companies_decodificado;
+    console.log("Aqui ya paso "+result[4])
     console.log(result);
-    res.send(result);
+    res.json(result);
   } catch (error) {
     console.log(error);
   }

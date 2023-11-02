@@ -22,7 +22,14 @@ class frontendController
         include "views/src/modules/dashboard.php";
     }
 
-
+    public static function busqueda()
+    {
+        session_start(); // Iniciar la sesión
+        if (!isset($_SESSION['usuario'])) {
+            header("Location: login");
+        }
+        include "views/src/modules/busqueda.php";
+    }
     public static function verification()
     {
         session_start(); // Iniciar la sesión

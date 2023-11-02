@@ -70,31 +70,48 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Función para llenar la tabla con resultados
+  // Función para llenar la tabla con resultados
   function llenarTabla(resultados) {
-    resultadoTabla.innerHTML = ""; // Limpiar la tabla
+    // Limpiar la tabla
+    resultadoTabla.innerHTML = "";
 
+    // Iterar sobre los resultados y agregarlos a la tabla
     resultados.forEach((resultado) => {
-      const fila = resultadoTabla.insertRow();
-      
-      const celdaNombre = fila.insertCell(0);
-      const celdaDPI = fila.insertCell(1);
-      const celdaDateBirth = fila.insertCell(2);
-      const celdaAddress = fila.insertCell(3);
-      const celdaCompanies = fila.insertCell(4);
+      // Crear una nueva fila
+      const fila = document.createElement("tr");
+      resultadoTabla.appendChild(fila);
 
-      celdaNombre.textContent = resultado[0];
-      celdaDPI.textContent = resultado[1];
-      celdaDateBirth.textContent = resultado[2];
-      celdaAddress.textContent = resultado[3];
-      celdaCompanies.textContent = resultado[4];
-
-      console.log(resultado);
+      // Agregar las celdas a la fila
+      for (const propiedad in resultado) {
+        const celda = fila.insertCell();
+        celda.textContent = resultado[propiedad];
+      }
     });
   }
 
+  // Manejador de evento para la búsqueda por Nombre
+  buttonBuscarNombre.addEventListener("click", function () {
+    const busqueda = busquedaInputName.value;
+    if (busqueda) {
+      // Realiza una solicitud GET a la ruta correspondiente (reemplaza con la ruta correcta)
+      fetch(`http://localhost:4000/api/lab1/searchByName/${busqueda}`, {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          llenarTabla(data); // Llena la tabla con los resultados
+        })
+        .catch((error) => {
+          console.error("Error en la búsqueda por Nombre y DPI: ", error);
+        });
+    }
+  });
+
   // Manejador de evento para la búsqueda por DPI
   buttonBuscarDPI.addEventListener("click", function () {
+    console.log("Acaba de entrar aca");
     const busqueda = busquedaInput.value;
+
     if (busqueda) {
       fetch(`http://localhost:4000/api/lab1/searchByDPI/${busqueda}`, {
         method: "GET",
@@ -104,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
           // Verifica si los datos son un array y contienen al menos 5 elementos
           if (Array.isArray(data) && data.length >= 5) {
             const resultado = data; // Renombrar la variable para mayor claridad
-  
+
             // Llena la tabla con los resultados
             const fila = resultadoTabla.insertRow();
             const celdaNombre = fila.insertCell(0);
@@ -112,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const celdaDateBirth = fila.insertCell(2);
             const celdaAddress = fila.insertCell(3);
             const celdaCompanies = fila.insertCell(4);
-  
+
             celdaNombre.textContent = resultado[0];
             celdaDPI.textContent = resultado[1];
             celdaDateBirth.textContent = resultado[2];
@@ -127,53 +144,41 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
   });
-  
 
-  // Manejador de evento para la búsqueda por Nombre
-  buttonBuscarNombre.addEventListener("click", function () {
-    const busqueda = busquedaInput.value;
-  
-    if (busqueda) {
-      fetch(`http://localhost:4000/api/lab1/searchByName/${busqueda}`, {
-        method: "GET",
-      })
+  // Manejador de evento para la búsqueda por Nombre y DPI
+  buttonBuscarNombreDPI.addEventListener("click", function () {
+    const busquedaDPI = busquedaInput.value;
+    const busquedaName = busquedaInputName.value;
+    if (busquedaDPI && busquedaName) {
+      // Realiza una solicitud GET a la ruta correspondiente (reemplaza con la ruta correcta)
+      fetch(
+        `http://localhost:4000/api/lab1/searchByNameDPI/${busquedaName}/${busquedaDPI}`,
+        {
+          method: "GET",
+        }
+      )
         .then((response) => response.json())
         .then((data) => {
           // Verifica si los datos son un array y contienen al menos 5 elementos
           if (Array.isArray(data) && data.length >= 5) {
-            // Iteramos sobre los datos y llenamos una fila por dato
-            for (const resultado of data) {
-              const fila = resultado.insertRow();
-  
-              // Iteramos sobre las propiedades del resultado y creamos una celda por propiedad
-              for (const propiedad in resultado) {
-                const celda = fila.insertCell();
-                celda.textContent = resultado[propiedad];
-              }
-            }
+            const resultado = data; // Renombrar la variable para mayor claridad
+
+            // Llena la tabla con los resultados
+            const fila = resultadoTabla.insertRow();
+            const celdaNombre = fila.insertCell(0);
+            const celdaDPI = fila.insertCell(1);
+            const celdaDateBirth = fila.insertCell(2);
+            const celdaAddress = fila.insertCell(3);
+            const celdaCompanies = fila.insertCell(4);
+
+            celdaNombre.textContent = resultado[0];
+            celdaDPI.textContent = resultado[1];
+            celdaDateBirth.textContent = resultado[2];
+            celdaAddress.textContent = resultado[3];
+            celdaCompanies.textContent = resultado[4];
           } else {
             console.error("Los datos de la API no tienen el formato esperado.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error en la búsqueda por DPI: ", error);
-        });
-    }
-  });
-  
-  
-
-  // Manejador de evento para la búsqueda por Nombre y DPI
-  buttonBuscarNombreDPI.addEventListener("click", function () {
-    const busqueda = busquedaInput.value;
-    if (busqueda) {
-      // Realiza una solicitud GET a la ruta correspondiente (reemplaza con la ruta correcta)
-      fetch(`http://localhost:4000/api/lab1/searchByNameDPI/${busqueda}`, {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          llenarTabla(data); // Llena la tabla con los resultados
+          } // Llena la tabla con los resultados
         })
         .catch((error) => {
           console.error("Error en la búsqueda por Nombre y DPI: ", error);
@@ -181,4 +186,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-

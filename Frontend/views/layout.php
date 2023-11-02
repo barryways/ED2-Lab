@@ -19,7 +19,11 @@ try {
         }else if($route == "logout"){
             $controller->logout();
             $inicio = false;
-        }else if($route == "prueba"){
+        }else if($route == "busqueda"){
+            $controller->busqueda();
+            $inicio = false;
+        }
+        else if($route == "prueba"){
             include "src/modules/prueba.php"; // Esto es lo que se va a mostrar en el "div" con id "contenido
             $inicio = false;
         }else {
