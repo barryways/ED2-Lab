@@ -7,11 +7,11 @@ import GeneratorKey from "./RSA/Generator.js";
 import path from "path";
 import fs from "fs";
 import RSA from "../common/rsa.js";
+import csv from "csv-parser";
 
 const conversation = new Conversation();
 const Coder = new coder();
 const firmador = new FirmadorRSA();
-
 
 class operations {
   constructor(tree) {
@@ -94,7 +94,7 @@ class operations {
         if (result[0] != name) {
           return "No coincide el nombre con el DPI";
         }
-        
+
         return result;
       }
       return result;
@@ -124,7 +124,7 @@ class operations {
     }
   }
 
-  getConversation(dpi){
+  getConversation(dpi) {
     const encriptacion = conversation.getConversationContent(dpi);
     conversation.saveConversationOnTxt(dpi);
     const desencriptada = conversation.getConversationContentCypher(dpi);
@@ -133,7 +133,7 @@ class operations {
     const message = this.getConversationInfo(encriptacion);
     return message;
   }
-  getConversationDecipher(dpi){
+  getConversationDecipher(dpi) {
     const desencriptada = conversation.getConversationContentCypher(dpi);
     conversation.saveConversationDecipherOnTxt(dpi);
     conversation.clearLists();
@@ -141,43 +141,109 @@ class operations {
     return message;
   }
 
-  compareHashes(mensajeOriginal, mensajeNuevo){
-    const hashOriginal = crypto.createHash('sha256').update(mensajeOriginal).digest('hex');
-    const hashNuevo = crypto.createHash('sha256').update(mensajeNuevo).digest('hex');
-    if(hashOriginal === hashNuevo){
-      return true
+  compareHashes(mensajeOriginal, mensajeNuevo) {
+    const hashOriginal = crypto
+      .createHash("sha256")
+      .update(mensajeOriginal)
+      .digest("hex");
+    const hashNuevo = crypto
+      .createHash("sha256")
+      .update(mensajeNuevo)
+      .digest("hex");
+    if (hashOriginal === hashNuevo) {
+      return true;
     }
-    return false
+    return false;
   }
-
 
   async signProcess(message, dpi) {
     const rsa = new RSA();
     const keys = rsa.generate(250);
-    
-    const clave_publica = keys.n; 
-    const clave_privada= keys.d; 
+
+    const clave_publica = keys.n;
+    const clave_privada = keys.d;
 
     let contador = 1;
     for (const conversacion in message) {
       if (message.hasOwnProperty(conversacion)) {
         const mensaje = message[conversacion];
         console.log(`Conversación: ${mensaje}`);
-        const { hash, signature } = firmador.firmar(clave_privada, mensaje);
-        this.escribirCSV(dpi, hash, signature, contador);
+        const originalMessageHash = crypto
+          .createHash("sha256")
+          .update(mensaje)
+          .digest("hex");
+        const signature = rsa.sign(mensaje, clave_privada, clave_publica);
+        this.escribirCSV(
+          dpi,
+          originalMessageHash,
+          signature,
+          clave_publica,
+          contador
+        );
       }
       contador++;
     }
   }
-  escribirCSV(nombreArchivoOriginal, hash, firma, contador) {
-    const data = `${nombreArchivoOriginal};${hash};${firma};${contador}\n`;
-    fs.appendFile('./src/data/RSA/signatures.csv', data, (err) => {
+  escribirCSV(dpi, hash, firma, clave_publica, contador) {
+    const data = `${dpi};${hash};${firma};${clave_publica};${contador}\n`;
+    fs.appendFile("./src/data/RSA/signatures.csv", data, (err) => {
       if (err) {
-        console.error('Error al escribir en el archivo CSV:', err);
+        console.error("Error al escribir en el archivo CSV:", err);
       } else {
-        console.log('Datos escritos en signatures.csv');
+        console.log("Datos escritos en signatures.csv");
       }
     });
+  }
+
+  validar2(dpi, validaciones) {
+    let listaValores = this.devolverValores(dpi);
+    const rsa = new RSA();
+    const listaConversaciones = conversation.getConversationContentDecipher(dpi);
+    let contador = 1;
+    console.log(listaValores)
+    return rsa.verify(listaConversaciones[0], listaValores[2], listaValores[3]);
+  }
+
+  devolverValores(dpi) {
+    let listaValores = [];
+    const archivoCSV = "./src/data/RSA/signatures.csv";
+
+    let dpiEncontrado = null;
+
+    fs.createReadStream(archivoCSV)
+      .pipe(csv({ separator: ";" }))
+      .on("data", (row) => {
+        const dpiABuscar = row[0];
+        console.log("este es el dpi" + dpiABuscar)
+        if (dpiABuscar === dpi) {
+          dpiEncontrado = dpi;
+          const hash = row["1"];
+          console.log("este es el hash "+hash);
+          const firma = row["2"];
+          console.log("esta es la firma "+firma);
+          const clave_publica = row["3"];
+          console.log("esta es la clave publica "+clave_publica)
+          const contador = row["4"];
+          
+          const valor = [
+            dpi,
+            hash,
+            firma,
+            clave_publica,
+            contador,
+          ];
+          console.log(valor)
+          return listaValores.push(valor);
+        }
+      })
+      .on("end", () => {
+        if (dpiEncontrado !== null) {
+          console.log(`Se encontró el DPI: ${dpiEncontrado}`);
+        } else {
+          console.log(`No se encontró el DPI: ${dpi}`);
+        }
+      });
+    return listaValores;
   }
 }
 

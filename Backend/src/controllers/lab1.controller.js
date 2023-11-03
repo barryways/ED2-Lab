@@ -178,6 +178,17 @@ const getValidation = asyncHandler(async (req, res) => {
   }
 });
 
+const getValidation2 = asyncHandler(async (req, res) => {
+  try {
+    const dpi = req.params.dpi;
+    let validacionesLista = [];
+    const validaciones = operation.validar2(dpi,validacionesLista);
+    res.send(validaciones);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 const rsa = asyncHandler(async (req, res) => {
   try {
     const rsa = new RSA();
@@ -219,5 +230,6 @@ export {
   searchLetterByDPI,
   getSignatures,
   getValidation,
+  getValidation2,
   rsa,
 };

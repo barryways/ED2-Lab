@@ -69,5 +69,18 @@ export default class RSA {
 
     return string;
   }
+  sign(document, d, n) {
+    const encodedDocument = this.encode(document);
+    const signature = this.decrypt(encodedDocument, d, n);
+    return signature;
+  }
+  verify(document, signature, senderPublicKey) {
+    const encodedDocument = this.encode(document);
+    const decryptedSignature = this.encrypt(signature, senderPublicKey.n, senderPublicKey.e);
+    return encodedDocument.equals(decryptedSignature);
+  }
+
+
+
 }
 

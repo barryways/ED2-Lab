@@ -125,8 +125,6 @@ export default class Conversation {
             let contenido = fs.readFileSync(rutaArchivo, "utf-8");
             contenido = this.encrypter.simpleColumnDecipher(contenido);
             contenidoArchivos.push(contenido);
-            
-
             this.contenidoDescifrado.push(contenido);
           }
         }
