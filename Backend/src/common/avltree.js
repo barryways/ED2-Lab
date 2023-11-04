@@ -52,15 +52,18 @@ class AVLTree {
   insertNodeHelper(node, item) {
     // find the position and insert the node
     if (node === null) {
+
       return new Node(item);
     }
 
     if (item.dpi < node.item.dpi) {
-      //console.log(node.item.dpi)
+
       node.left = this.insertNodeHelper(node.left, item);
     } else if (item.dpi > node.item.dpi) {
+
       node.right = this.insertNodeHelper(node.right, item);
     } else {
+
       return node;
     }
 
@@ -252,7 +255,8 @@ class AVLTree {
           node.item.dpi,
           node.item.datebirth,
           node.item.address,
-          node.item.companies
+          node.item.companies,
+          node.item.recluiters
         ];
         //console.log(`resultado del nodo: ${result}`);
         return result;
@@ -285,7 +289,8 @@ class AVLTree {
           node.item.dpi,
           node.item.datebirth,
           node.item.address,
-          node.item.companies
+          node.item.companies,
+          node.item.recluiter
         ];
         results.push(result);
       }

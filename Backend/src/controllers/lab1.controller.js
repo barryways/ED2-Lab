@@ -21,14 +21,19 @@ function processLine(record) {
     parsedData.dpi,
     parsedData.datebirth,
     parsedData.address,
-    parsedData.companies
+    parsedData.companies,
+    parsedData.recluiter
   );
-
+  console.log(person);
   try {
     if (record.operation === "INSERT") {
+      console.log("aqui llega")
       operation.InsertData(person);
+
+      console.log("Insercion exitosa de "+person.name +" con dpi "+person.dpi);
     } else if (record.operation === "DELETE") {
       operation.DeleteData(person);
+      //console.log("Llego al delete")
     } else if (record.operation === "PATCH") {
       operation.PatchData(person);
     } else {
@@ -42,10 +47,11 @@ function processLine(record) {
 const treeCharger = asyncHandler(async (req, res) => {
   try {
     let validacion = "Arbol no cargado";
-    const path = "./src/data/input(3).csv";
+    const path = "./src/data/Lab5/input.csv";
     const records = await csvParser(path);
 
     for (const record of records) {
+      console.log(record)
       processLine(record);
     }
     validacion = "Arbol cargado correctamente";

@@ -6,6 +6,7 @@ class lz78 {
     }
     compress(stream){
         try {
+            
             let dictionary = {};
             let offset = 0;
             let extra = 0;

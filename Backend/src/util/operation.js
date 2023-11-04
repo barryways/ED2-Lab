@@ -20,7 +20,11 @@ class operations {
 
   InsertData(person) {
     try {
+      
       person.companies = Coder.codificacion_persona(person);
+      if(person.dpi == "6789822289548"){
+        console.log("Aqui llega sus comapnies son "+person.companies)
+      }
       this.tree.insertNode(person);
       return this.tree;
     } catch (error) {
