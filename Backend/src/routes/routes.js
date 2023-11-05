@@ -8,8 +8,10 @@ import {
     deleteByNameDpi, 
     searchLetterByDPI,
     getSignatures,
+    getSignatures3,
     getValidation,
     getValidation2,
+    getValidation3,
     rsa,
     login
  } from "../controllers/lab1.controller.js";
@@ -21,7 +23,9 @@ router.route('/getData/').get(getData);
 //localhost:4000/api/lab1/getData/
 router.route('/signatures/:dpi').get(getSignatures);
 //localhost:4000/api/lab1/signatures/:dpi
-router.route('/validate2/:dpi').get(getValidation2);
+router.route('/signatures3/:dpi').get(getSignatures3);
+//localhost:4000/api/lab1/signatures/:dpi
+router.route('/validate2/:dpi').get(getValidation3);
 router.route('/validate/:dpi').get(getValidation);
 //localhost:4000/api/lab1/signatures/:dpi
 router.route('/searchByName/:name').get(searchByName);

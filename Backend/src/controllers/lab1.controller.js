@@ -14,7 +14,6 @@ const tree = new AVLTree();
 const operation = new operations(tree);
 const decoder = new coder();
 
-
 function processLine(record) {
   const parsedData = JSON.parse(record.json);
   const person = new Person(
@@ -28,15 +27,13 @@ function processLine(record) {
 
   try {
     if (record.operation === "INSERT") {
-     // operation.crearPassword(person.dpi, person.recluiter)
+      // operation.crearPassword(person.dpi, person.recluiter)
       operation.InsertData(person);
-
     } else if (record.operation === "DELETE") {
       //operation.eliminarPassword(person.dpi);
       operation.DeleteData(person);
-
     } else if (record.operation === "PATCH") {
-     // operation.eliminarPassword(person.dpi);
+      // operation.eliminarPassword(person.dpi);
       operation.PatchData(person);
     } else {
       console.error(`Comando desconocido: ${command}`);
@@ -45,7 +42,6 @@ function processLine(record) {
     console.error(`Error en línea: ${record}`, error);
   }
 }
-
 
 const getData = asyncHandler(async (req, res) => {
   try {
@@ -174,8 +170,45 @@ const getValidation2 = asyncHandler(async (req, res) => {
   try {
     const dpi = req.params.dpi;
     let validacionesLista = [];
-    const validaciones = operation.validar2(dpi,validacionesLista);
+    const validaciones = operation.validar2(dpi, validacionesLista);
     res.send(validaciones);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const getSignatures3 = asyncHandler(async (req, res) => {
+  try {
+    const dpi = req.params.dpi;
+    const message = operation.getConversation(dpi);
+    const operacion = await operation.firmarConversacion(dpi, message);
+    console.log(operacion)
+    res.json(message);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const getValidation3 = asyncHandler(async (req, res) => {
+  try {
+    const dpi = req.params.dpi;
+    let validaciones = [];
+    let texto = "";
+    const message = conversation.getConversationContent(dpi);
+    console.log("este es el message original" +message)
+    const messageAfterCypher = conversation.getConversationContentDecipher(dpi);
+    for (const conversacion in message) {
+      if (message.hasOwnProperty(conversacion)) {
+        const element = message[conversacion];
+        const element2 = messageAfterCypher[conversacion];
+        const validation = operation.compareHashes(element, element2);
+        validaciones.push(validation);
+      }
+    }
+    for (let i = 0; i < validaciones.length; i++) {
+      texto = `${texto} \n La conversacion ${i + 1} es ${validaciones[i]}`;
+    }
+    res.send(texto);
   } catch (error) {
     console.log(error);
   }
@@ -219,7 +252,7 @@ const login = asyncHandler(async (req, res) => {
     const company = req.params.company;
     const dpi = req.params.dpi;
 
-    const result = operation.login(user, password, company,dpi);
+    const result = operation.login(user, password, company, dpi);
 
     res.send(result);
   } catch (error) {
@@ -234,9 +267,11 @@ export {
   deleteByNameDpi,
   searchLetterByDPI,
   getSignatures,
+  getSignatures3,
   getValidation,
   getValidation2,
+  getValidation3,
   rsa,
   processLine,
-  login
+  login,
 };

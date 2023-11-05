@@ -9,6 +9,7 @@ import fs from "fs";
 import RSA from "../common/rsa.js";
 import csv from "csv-parser";
 import readline from "readline";
+import Firmador2 from "./RSA/Firmador2.js";
 
 const conversation = new Conversation();
 const Coder = new coder();
@@ -142,6 +143,7 @@ class operations {
     return message;
   }
 
+  //INTENTO 1 DE FIRMAR
   compareHashes(mensajeOriginal, mensajeNuevo) {
     const hashOriginal = crypto
       .createHash("sha256")
@@ -195,6 +197,18 @@ class operations {
       }
     });
   }
+  //INTENTO 2 DE FIRMAR
+  async firmarConversacion(dpi, message) {
+    try {
+      const firmador2 = new Firmador2();
+      await firmador2.signProcess(message, dpi);
+      return "firmado";
+    } catch (error) {
+      return error;
+    }
+  }
+
+  //INTENTO 3 DE FIRMAR
 
   validar2(dpi, validaciones) {
     let listaValores = this.devolverValores(dpi);
@@ -293,14 +307,26 @@ class operations {
   login(usuario, contraseña, compañia, dpi) {
     try {
       const rsa = new RSA();
-      const keys = rsa.generate(250);
+      const keys = rsa.generate(1024);
 
-      const message = `${usuario};${contraseña};${compañia}`;
+      const message = `${usuario};${contraseña};${compañia};${dpi}`;
+      const message2 = message.toString();
       const encoded_message = rsa.encode(message);
       const encrypted_message = rsa.encrypt(encoded_message, keys.n, keys.e);
       const decrypted_message = rsa.decrypt(encrypted_message, keys.d, keys.n);
       const decoded_message = rsa.decode(decrypted_message);
-      if (this.verification(dpi, contraseña, usuario, compañia)) {
+  
+      console.log("Message:", message);
+      console.log("Encoded:", encoded_message.toString());
+      console.log("Encrypted:", encrypted_message.toString());
+      console.log("Decrypted:", decrypted_message.toString());
+      console.log("Decoded:", decoded_message.toString());
+      console.log();
+      console.log("Correct?", message === decoded_message);
+      console.log("decoded:", decoded_message);
+      this.escribirCSVLogin(usuario, contraseña, compañia, dpi, decoded_message, keys.n, keys.d);
+
+      if (this.verification(encrypted_message, keys.d, keys.n,compañia )) {
         console.log("la operacion fue un exito padre con el DPI " + dpi);
         return "la operacion fue un exito padre con el DPI " + dpi; //aqui me quede, el clavo es que tengo que pasarle un dpi porque asi lo identifico en el archivo pero de donde saco ese dpi
         //lo puedo splitear de la contraseña pero no se si eso sea lo correcto
@@ -312,10 +338,33 @@ class operations {
     }
   }
 
-  verification(dpi, contraseña, usuario, compañia) {
-    // Abre el archivo CSV
-    const contraseñas = fs.readFileSync("./src/data/pass.csv", "utf-8");
+  escribirCSVLogin(usuario, contraseña, compañia, dpi, mensaje, clave_publica, clave_privada) {
+    const data = `${usuario};${contraseña};${compañia};${dpi};${mensaje};${clave_publica};${clave_privada}\n`;
+    fs.appendFile("./src/data/RSA/validationsLogin.csv", data, (err) => {
+      if (err) {
+        console.error("Error al escribir en el archivo CSV:", err);
+      } else {
+        console.log("Datos escritos en validationsLogin.csv");
+      }
+    });
+  }
 
+  verification(encrypted_message, d, n, compañia) {
+    // Abre el archivo CSV
+
+    const rsa = new RSA();
+    const decrypted_message = rsa.decrypt(encrypted_message, d, n);
+    const decoded_message = rsa.decode(decrypted_message);
+
+    const decoded_message2 = decoded_message.toString();
+    console.log("Este es el 2 "+decoded_message2);
+    const datos = decoded_message.split(";");
+    console.log(datos);
+    const usuario = datos[0];
+    const contraseña = datos[1];
+    const compañía = datos[2];
+    const dpi = datos[3];
+    const contraseñas = fs.readFileSync("./src/data/pass.csv", "utf-8");
     // Lee el archivo CSV línea por línea
     const contraseñasArray = contraseñas.split("\n");
 
@@ -324,10 +373,8 @@ class operations {
       const datos = contraseñaEnLinea.split(";");
       if (datos[0] === dpi && datos[1] === contraseña) {
         if (this.companyVerification(dpi, compañia, usuario)) {
-          
           return true;
-        }
-        else{
+        } else {
           return false;
         }
       }
@@ -340,7 +387,7 @@ class operations {
     const companies_decodificado = Coder.decodificadoEmpresas(result); // Almacena el resultado en una variable.
     result[4] = companies_decodificado;
     if (result[5] === usuario) {
-      if(result[4].includes(compañia)){
+      if (result[4].includes(compañia)) {
         return true;
       }
     } else {
