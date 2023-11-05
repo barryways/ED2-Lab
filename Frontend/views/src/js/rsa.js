@@ -1,62 +1,87 @@
-import { pow } from "math";
+const bigInt = require('big-integer');
 
-function generarClavesRSA(bits) {
-  // Generamos dos números primos grandes
-  const p = Math.floor(Math.random() * Math.pow(2, bits)) + 1;
-  const q = Math.floor(Math.random() * Math.pow(2, bits)) + 1;
+class RSA {
+   randomPrime(bits) {
+    const min = bigInt.one.shiftLeft(bits - 1);
+    const max = bigInt.one.shiftLeft(bits).prev();
+    
+    while (true) {
+      let p = bigInt.randBetween(min, max);
+      if (p.isProbablePrime(256)) {
+        return p;
+      } 
+    }
+  }
 
-  // Calculamos el número n
-  const n = p * q;
+   generate(keysize) {
+    const e = bigInt(65537);
+    let p;
+    let q;
+    let totient;
+  
+    do {
+      p = this.randomPrime(keysize / 2);
+      q = this.randomPrime(keysize / 2);
+      totient = bigInt.lcm(
+        p.prev(),
+        q.prev()
+      );
+    } while (bigInt.gcd(e, totient).notEquals(1) || p.minus(q).abs().shiftRight(keysize / 2 - 100).isZero());
 
-  // Calculamos el phi de n
-  const phi = (p - 1) * (q - 1);
+    return {
+      e, 
+      n: p.multiply(q),
+      d: e.modInv(totient),
+    };
+  }
 
-  // Generamos el exponente e
-  const e = Math.floor(Math.random() * phi) + 1;
+   encrypt(encodedMsg, n, e) {
+    return bigInt(encodedMsg).modPow(e, n);
+  }
 
-  // Calculamos el exponente d, el inverso de e módulo phi
-  const d = math.modInverse(e, phi);
+   decrypt(encryptedMsg, d, n) {
+    return bigInt(encryptedMsg).modPow(d, n); 
+  }
 
-  // Devolvemos las claves
-  return {
-    n: n,
-    e: e,
-    d: d,
-  };
+   encode(str) {
+    const codes = str
+      .split('')
+      .map(i => i.charCodeAt())
+      .join('');
+
+     return bigInt(codes);
+  }
+
+   decode(code) {
+    const stringified = code.toString();
+    let string = '';
+
+    for (let i = 0; i < stringified.length; i += 2) {
+      let num = Number(stringified.substr(i, 2));
+      
+      if (num <= 30) {
+        string += String.fromCharCode(Number(stringified.substr(i, 3)));
+        i++;
+      } else {
+        string += String.fromCharCode(num);
+      }
+    }
+
+    return string;
+  }
+  sign(document, d, n) {
+    const encodedDocument = this.encode(document);
+    const signature = this.decrypt(encodedDocument, d, n);
+    return signature;
+  }
+  verify(document, signature, senderPublicKey) {
+    const encodedDocument = this.encode(document);
+    const decryptedSignature = this.encrypt(signature, senderPublicKey.n, senderPublicKey.e);
+    return encodedDocument.equals(decryptedSignature);
+  }
+
+
+
 }
 
-function encriptarRSA(m, n, e) {
-  // Convertimos el mensaje en un número entero
-  const mn = parseInt(m);
-
-  // Encriptamos el mensaje
-  const c = math.pow(mn, e, n);
-
-  // Devolvemos el mensaje encriptado
-  return c;
-}
-
-function desencriptarRSA(c, n, d) {
-  // Desencriptamos el mensaje
-  const mn = math.pow(c, d, n);
-
-  // Convertimos el mensaje desencriptado de un número entero a un string
-  const m = String.fromCharCode(mn);
-
-  // Devolvemos el mensaje desencriptado
-  return m;
-}
-
-// Generamos las claves
-const claves = generarClavesRSA(2048);
-
-// Encriptamos un mensaje
-const mensaje = "Hola, mundo!";
-const mensajeEncriptado = encriptarRSA(mensaje, claves.n, claves.e);
-
-// Desencriptamos el mensaje
-const mensajeDesencriptado = desencriptarRSA(mensajeEncriptado, claves.n, claves.d);
-
-// Imprimimos el mensaje original y el mensaje desencriptado
-console.log("Mensaje original:", mensaje);
-console.log("Mensaje desencriptado:", mensajeDesencriptado);
+module.exports = RSA;

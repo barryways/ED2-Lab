@@ -1,0 +1,14 @@
+# Ignora la carpeta donde Composer instala las dependencias
+/vendor
+
+# Ignora el archivo de bloqueo de Composer
+composer.lock
+
+# Ignora el archivo de caché de Composer
+composer.phar
+
+# Ignora el directorio .idea si usas PHPStorm
+.idea
+
+# Ignora el directorio .vscode si usas Visual Studio Code
+.vscode

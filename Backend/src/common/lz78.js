@@ -23,6 +23,8 @@ class lz78 {
                     if (dictionary.hasOwnProperty(buffer)) {
                         extra++;
                     }
+                    // console.log("offset"+ offset)
+                    // console.log("Extra "+extra)
                 }
                 
                 index = dictionary[buffer];

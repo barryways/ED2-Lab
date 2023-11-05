@@ -256,7 +256,7 @@ class AVLTree {
           node.item.datebirth,
           node.item.address,
           node.item.companies,
-          node.item.recluiters
+          node.item.recluiter
         ];
         //console.log(`resultado del nodo: ${result}`);
         return result;

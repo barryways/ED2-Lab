@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import {treeCharger,
+import {
     getData,
     searchByDPI, 
     searchByName,
@@ -10,11 +10,12 @@ import {treeCharger,
     getSignatures,
     getValidation,
     getValidation2,
-    rsa
+    rsa,
+    login
  } from "../controllers/lab1.controller.js";
 
 
-router.route('/import/').get(treeCharger);
+//router.route('/import/').get(treeCharger);
 //localhost:4000/api/lab1/import/
 router.route('/getData/').get(getData);
 //localhost:4000/api/lab1/getData/
@@ -34,6 +35,10 @@ router.route('/deleteByNameDPI/:name/:dpi').get(deleteByNameDpi);
 router.route('/getLetter/:dpi').get(searchLetterByDPI);
 //localhost:4000/api/lab1/getLetter/:dpi
 router.route('/rsa/').get(rsa);
+//localhost:4000/api/lab1/rsa/
+router.route('/login/:user/:password/:company/:dpi').get(login);
+//localhost:4000/api/lab1/login/:user/:password/:company
+
 
 
 export default router;

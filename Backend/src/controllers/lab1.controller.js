@@ -14,6 +14,7 @@ const tree = new AVLTree();
 const operation = new operations(tree);
 const decoder = new coder();
 
+
 function processLine(record) {
   const parsedData = JSON.parse(record.json);
   const person = new Person(
@@ -24,17 +25,18 @@ function processLine(record) {
     parsedData.companies,
     parsedData.recluiter
   );
-  console.log(person);
+
   try {
     if (record.operation === "INSERT") {
-      console.log("aqui llega")
+     // operation.crearPassword(person.dpi, person.recluiter)
       operation.InsertData(person);
 
-      console.log("Insercion exitosa de "+person.name +" con dpi "+person.dpi);
     } else if (record.operation === "DELETE") {
+      //operation.eliminarPassword(person.dpi);
       operation.DeleteData(person);
-      //console.log("Llego al delete")
+
     } else if (record.operation === "PATCH") {
+     // operation.eliminarPassword(person.dpi);
       operation.PatchData(person);
     } else {
       console.error(`Comando desconocido: ${command}`);
@@ -44,22 +46,6 @@ function processLine(record) {
   }
 }
 
-const treeCharger = asyncHandler(async (req, res) => {
-  try {
-    let validacion = "Arbol no cargado";
-    const path = "./src/data/Lab5/input.csv";
-    const records = await csvParser(path);
-
-    for (const record of records) {
-      console.log(record)
-      processLine(record);
-    }
-    validacion = "Arbol cargado correctamente";
-    res.send(validacion);
-  } catch (error) {
-    console.log(`Ocurrio un error ${error}`);
-  }
-});
 
 const getData = asyncHandler(async (req, res) => {
   try {
@@ -226,8 +212,21 @@ const rsa = asyncHandler(async (req, res) => {
   }
 });
 
+const login = asyncHandler(async (req, res) => {
+  try {
+    const user = req.params.user;
+    const password = req.params.password;
+    const company = req.params.company;
+    const dpi = req.params.dpi;
+
+    const result = operation.login(user, password, company,dpi);
+
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+  }
+});
 export {
-  treeCharger,
   getData,
   searchByName,
   searchByDPI,
@@ -238,4 +237,6 @@ export {
   getValidation,
   getValidation2,
   rsa,
+  processLine,
+  login
 };

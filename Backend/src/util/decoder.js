@@ -39,20 +39,10 @@ export default class coder {
   }
   codificacion_persona(person) {
     try {
-      if(person.dpi == "6789822289548"){
-        console.log("Aqui llega al deco sus comapnies son "+person.companies)
-      }
-      const espacioVacio = "", codificadoEmpresas = [];
-      if(person.dpi == "6789822289548"){
-        console.log("Aqui llega al deco sus comapnies son 2")
-      }
-
+      const espacioVacio = " ", codificadoEmpresas = [];
       person.companies.forEach(element => {
-        console.log(element)
         let espacio_vacio = espacioVacio;
-        console.log(`'${element+=espacioVacio}' este fue con espacio vacio, este es sin '${element}'`);
-
-        const dpi_empresa = LZ78.compress(element);
+        const dpi_empresa = LZ78.compress(element+=espacio_vacio);
         
         codificadoEmpresas.push(dpi_empresa)
       });

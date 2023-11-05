@@ -7,6 +7,14 @@
                 <div class="text-center ">
                     <h1 class="text-center text-dark roboto">Talent Hub <br>Login</h1>
                     <form action="verification" method="POST" class="form">
+                    <div class="form-group mb-3">
+                            <label for="dpi" class="form-label text-dark">DPI</label>
+                            <input type="number" name="dpi" id="dpi" class="form-control" placeholder="DPI">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="company" class="form-label text-dark">Compañia</label>
+                            <input type="text" name="company" id="company" class="form-control" placeholder="Compañia">
+                        </div>
                         <div class="form-group mb-3">
                             <label for="user" class="form-label text-dark">Usuario</label>
                             <input type="text" name="user" id="user" class="form-control" placeholder="Usuario">
