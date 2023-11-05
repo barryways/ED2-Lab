@@ -23,7 +23,7 @@ export default class Conversation {
 
   getConversationContent(dpi) {
     try {
-      const carpeta = "./src/data/RSA/inputs";
+      const carpeta = "./src/data/Lab5/inputs";
       const archivos = fs.readdirSync(carpeta);
 
       const contenidoArchivos = [];

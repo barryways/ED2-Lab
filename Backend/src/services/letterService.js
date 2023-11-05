@@ -9,7 +9,7 @@ export default class letter {
   }
   getLetterContent(dpi) {
     try {
-      const carpeta = "./src/data/inputs";
+      const carpeta = "./src/data/Lab5/inputs";
       const archivos = fs.readdirSync(carpeta);
 
       const contenidoArchivos = [];
