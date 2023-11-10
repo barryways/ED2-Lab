@@ -1,4 +1,5 @@
 <?php
+require 'vendor/autoload.php';
 use GuzzleHttp\Client;
 class frontendModel
 {
@@ -7,29 +8,26 @@ class frontendModel
     {
         $this->api = 'http://localhost:4000/api/lab1/';
     }
+    
     public  function validateCredentials($user, $pass, $company, $dpi){
-        $url = $this->api . 'login/'.$user.'/'.$pass.'/'.$company. '/' . $dpi;
-
-        $client = new Client();
-        $response = $client->get($url, [
-          "query" => [
-            "user" => $user,
-            "password" => $pass,
-            "company" => $company,
-            "dpi" => $dpi,
-          ],
-        ]);
-
-
-        $status = $response->getStatusCode();
+        try {
+            $url = $this->api . 'login/'.$user.'/'.$pass.'/'.$company. '/' . $dpi;
+            $client = new Client();
+            $response = $client->get($url);
+            
+            $status = $response->getStatusCode();
+            
+            if ($status === 200) {
+                $json = json_decode($response->getBody());
+                echo "". $json->success ."". $json->message ;
+                return true;
+            } else {
+                
+                return false;
+            }
         
-        if ($status === 200) {
-            $json = json_decode($response->getBody());
-            echo "". $json->success ."". $json->message ;
-            return true;
-        } else {
-            // Solicitud fallida
-            echo "hola";
+        } catch (\Throwable $th) {
+            
             return false;
         }
     }

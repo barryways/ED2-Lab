@@ -1,5 +1,30 @@
 <body>
 
+    <?php
+    session_start();
+    if (isset($_SESSION['error'])) {
+
+        $error = $_SESSION['error'];
+        unset($_SESSION['error']);
+    }
+    ?>
+
+    <script>
+
+        <?php
+        if (isset($error)) {
+            ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '<?php echo $error ?>',
+            })
+            <?php
+        }
+        ?>
+    </script>
+
+
     <div class="contenedor-imagen d-flex justify-content-center align-items-center">
         <div class="container">
             <div class="bg-light p-5 b-radius">
@@ -7,7 +32,7 @@
                 <div class="text-center ">
                     <h1 class="text-center text-dark roboto">Talent Hub <br>Login</h1>
                     <form action="verification" method="POST" class="form">
-                    <div class="form-group mb-3">
+                        <div class="form-group mb-3">
                             <label for="dpi" class="form-label text-dark">DPI</label>
                             <input type="number" name="dpi" id="dpi" class="form-control" placeholder="DPI">
                         </div>

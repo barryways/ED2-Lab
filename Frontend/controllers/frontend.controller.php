@@ -30,9 +30,10 @@ class frontendController
         }
         include "views/src/modules/busqueda.php";
     }
-    private function validateCredentials($user, $pass, $company, $dpi) : bool{
+    private function validateCredentials($user, $pass, $company, $dpi): bool
+    {
         $result = $this->model->validateCredentials($user, $pass, $company, $dpi);
-        if($result){
+        if ($result) {
             return true;
         }
         return false;
@@ -44,19 +45,23 @@ class frontendController
         $company = $_POST['company'];
         $usuario = $_POST['user'];
         $clave = $_POST['password'];
-        
+
 
         $controller = new frontendcontroller(); // Crear una instancia de la clase
         $isValid = $controller->validateCredentials($usuario, $clave, $company, $dpi);
 
         if ($isValid) {
+
             $_SESSION['usuario'] = $usuario;
             $_SESSION['company'] = $company;
             header("Location: dashboard");
+            exit;
+        } else {
+            $_SESSION['error'] = "Credenciales Incorrectas";
+            header("Location: login");
+            exit;
         }
     }
-
-
 
     public static function logout()
     {
