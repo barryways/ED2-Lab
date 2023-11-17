@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const buttonBuscarDPI = document.getElementById("buscarDPI");
   const buttonBuscarNombre = document.getElementById("buscarNombre");
   const buttonBuscarNombreDPI = document.getElementById("buscarNombreDPI");
+  const buttonCartas = document.getElementById("obtenerCartas");
+  const buttonConversations = document.getElementById("obtenerConversaciones");
   const busquedaInput = document.getElementById("busquedaInput");
   const resultadoTabla = document
     .getElementById("resultadoTabla")
@@ -45,6 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
     buttonBuscarDPI.removeAttribute("disabled");
     buttonBuscarNombre.removeAttribute("disabled");
     buttonBuscarNombreDPI.removeAttribute("disabled");
+    buttonCartas.removeAttribute("disabled");
+    buttonConversations.removeAttribute("disabled");
   });
 
   // Función para llenar la tabla con resultados
@@ -163,4 +167,63 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
   });
+
+
+  // Manejador de evento para la búsqueda por Nombre
+  buttonCartas.addEventListener("click", function () {
+    const busquedaDPI = busquedaInput.value;
+    if (busquedaDPI) {
+      // Realiza una solicitud GET a la ruta correspondiente (reemplaza con la ruta correcta)
+      fetch(`http://localhost:4000/api/lab1/getLetter/${busquedaDPI}`, {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          let message = "Datos:\n";
+
+          // Itera sobre las propiedades del objeto
+          for (let key in data) {
+            if (data.hasOwnProperty(key)) {
+              // Agrega la propiedad y su valor a la cadena
+              message += `${key}: ${data[key]}\n`;
+            }
+          }
+  
+          // Muestra el mensaje en SweetAlert
+          Swal.fire("Descarga exitosa", message, "success");
+        })
+        .catch((error) => {
+          Swal.fire("Error", "No se pudo descargar el archivo", "error");
+        });
+    }
+  });
+    // Manejador de evento para la búsqueda por Nombre
+    buttonConversations.addEventListener("click", function () {
+      const busquedaDPI = busquedaInput.value;
+      if (busquedaDPI) {
+        // Realiza una solicitud GET a la ruta correspondiente (reemplaza con la ruta correcta)
+        fetch(`http://localhost:4000/api/lab1/signatures/${busquedaDPI}`, {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            let message = "Datos:\n";
+
+            // Itera sobre las propiedades del objeto
+            for (let key in data) {
+              if (data.hasOwnProperty(key)) {
+                // Agrega la propiedad y su valor a la cadena
+                message += `${key}: ${data[key]}\n`;
+              }
+            }
+    
+            // Muestra el mensaje en SweetAlert
+            Swal.fire("Descarga exitosa", message, "success");
+          })
+          .catch((error) => {
+            Swal.fire("Error", "No se pudo descargar el archivo", "error");
+          });
+      }
+    });
+
 });

@@ -26,11 +26,13 @@
                     <input type="text" id="busquedaInputName" placeholder="Ingresa el nombre" class="form-control mb-4">
                 </div>
 
-                <div class="mb-5">
-                    <div class="container">
-                        <button id="buscarDPI" class="btn btn-primary" disabled>Buscar por DPI</button>
-                        <button id="buscarNombre" class="btn btn-primary" disabled>Buscar por Nombre</button>
-                        <button id="buscarNombreDPI" class="btn btn-primary" disabled>Buscar por Nombre y DPI</button>
+                <div class="mb-5 row">
+                    <div class="col-sm-12 d-grid justify-content-center">
+                        <button id="buscarDPI" class="btn btn-primary d-block mb-2" disabled>Buscar por DPI</button>
+                        <button id="buscarNombre" class="btn btn-primary d-block mb-2" disabled>Buscar por Nombre</button>
+                        <button id="buscarNombreDPI" class="btn btn-primary d-block mb-2" disabled>Buscar por Nombre y DPI</button>
+                        <button id="obtenerCartas" class="btn btn-primary d-block mb-2" >Obtener Cartas</button>
+                        <button id="obtenerConversaciones" class="btn btn-primary d-block mb-2" >Obtener Conversaciones</button>
                     </div>
                 </div>
 
