@@ -176,7 +176,7 @@ class operations {
           .update(mensaje)
           .digest("hex");
         const signature = rsa.sign(mensaje, clave_privada, clave_publica);
-        this.escribirCSV(
+        this.escribirCSV( 
           dpi,
           originalMessageHash,
           signature,

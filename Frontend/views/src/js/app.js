@@ -1,55 +1,33 @@
 document.addEventListener("DOMContentLoaded", function () {
   const button = document.getElementById("importar");
   button.addEventListener("click", function () {
-    fetch("http://localhost:4000/api/lab1/import", {
+    fetch("http://localhost:4000/api/lab1/getData", {
       method: "GET",
     })
       .then((response) => response.text())
-      .then((data) => {
-        // Muestra una SweetAlert con un botón para descargar el archivo
-        Swal.fire({
-          title: "Datos importados",
-          text: data,
-          showCancelButton: true,
-          confirmButtonText: "Descargar Archivo",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Realiza una solicitud GET para descargar el archivo
-            fetch("http://localhost:4000/api/lab1/getData", {
-              method: "GET",
-            })
-              .then((response) => response.text())
-              .then((downloadData) => {
-                // Crear un enlace invisible y simular un clic para descargar el archivo
-                const blob = new Blob([downloadData], {
-                  type: "application/octet-stream",
-                });
-                const url = window.URL.createObjectURL(blob);
-
-                const a = document.createElement("a");
-                a.style.display = "none";
-                a.href = url;
-                a.download = "datos.jsonl"; // Nombre del archivo a descargar
-                document.body.appendChild(a);
-                a.click();
-
-                // Liberar el objeto URL
-                window.URL.revokeObjectURL(url);
-              })
-              .catch((error) => {
-                console.error("Error al descargar el archivo: ", error);
-                Swal.fire("Error", "No se pudo descargar el archivo", "error");
-              });
-          }
+      .then((downloadData) => {
+        console.log("llego aca 1");
+        // Crear un enlace invisible y simular un clic para descargar el archivo
+        const blob = new Blob([downloadData], {
+          type: "application/octet-stream",
         });
+        const url = window.URL.createObjectURL(blob);
+        console.log("llego aca 2");
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "datos.jsonl";
+        console.log("llego aca 3"); // Nombre del archivo a descargar
+        document.body.appendChild(a);
+        a.click();
+        console.log("llego aca 4");
+        // Liberar el objeto URL
+        window.URL.revokeObjectURL(url);
+        Swal.fire("Descarga exitosa", "El archivo se descargó correctamente", "success");
       })
       .catch((error) => {
-        console.error("Error al importar los datos: ", error);
-        Swal.fire(
-          "Error",
-          "Ha ocurrido un error al importar los datos",
-          "error"
-        );
+        console.error("Error al descargar el archivo: ", error);
+        Swal.fire("Error", "No se pudo descargar el archivo", "error");
       });
   });
 
@@ -186,4 +164,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-
